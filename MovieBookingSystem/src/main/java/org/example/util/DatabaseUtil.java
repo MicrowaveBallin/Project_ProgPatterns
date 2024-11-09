@@ -3,7 +3,7 @@ package org.example.util;
 import java.sql.*;
 
 public class DatabaseUtil {
-    private static final String BASE_URL = "jdbc:sqlite:./src/main/resources/database/data.db";
+    private static final String BASE_URL = "jdbc:sqlite:./src/main/resources/data.db";
 
     private static final String USER_TABLE = """
             CREATE TABLE IF NOT EXISTS Users (
@@ -82,7 +82,7 @@ public class DatabaseUtil {
         return connection;
     }
     
-    private static boolean executeSql(String sql) {
+    public static boolean executeSql(String sql) {
         try (Connection conn = connect();
              Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
@@ -91,6 +91,31 @@ public class DatabaseUtil {
             System.out.println(e.getMessage());
         }
         return true;
+    }
+
+    public int executeUpdate (String sql, Object[] values){
+        int rowAffected = 0;
+        try(Connection connection = connect();
+        PreparedStatement ps = connection.prepareStatement(sql)){
+            for(int i = 0; i < values.length; i++){
+                ps.setObject(i + 1, values[i]);
+            }
+            rowAffected = ps.executeUpdate();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return rowAffected;
+    }
+
+    public ResultSet getRecords (String sql){
+        ResultSet rs = null;
+        try(Connection connection = connect();
+            PreparedStatement ps = connection.prepareStatement(sql)){
+            rs = ps.executeQuery();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return rs;
     }
 
     public static void createAllTables() {

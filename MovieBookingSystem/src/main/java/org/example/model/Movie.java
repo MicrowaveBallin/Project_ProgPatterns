@@ -27,6 +27,7 @@ public class Movie {
         this.synopsis = synopsis;
     }
 
+    /*
     //Methods to insert movies into database
     public void insertMovie() {
         String sql = "INSERT INTO Movies(title, genre, rating,duration,synopsis) VALUES(?,?,?,?,?)";
@@ -38,7 +39,9 @@ public class Movie {
             System.out.println("Movie not inserted successfully");
         }
     }
+    */
 
+        /*
         //methods to view all movies in database
         public void showMovies() {
             String sql = "SELECT * FROM Movies";
@@ -57,4 +60,5 @@ public class Movie {
                 e.printStackTrace();
             }
         }
+        */
 }

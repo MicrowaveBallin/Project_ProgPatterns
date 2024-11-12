@@ -12,15 +12,10 @@ import java.sql.Timestamp;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-//        Connection connection = DatabaseUtil.connect();
-//        if (connection != null) {
-//            System.out.println("Database connection successful!");
-//        } else {
-//            System.out.println("Database connection failed.");
-//        }
+        Connection connection = DatabaseUtil.connect();
 
 
-//        DatabaseUtil.createAllTables();
+        DatabaseUtil.createAllTables();
 //        Movie movie = new Movie("Inception", 148, 8.8, "Sci-Fi", "A thief steals secrets through dream-sharing technology.");
 //        movie.insertMovie();
 
@@ -36,9 +31,14 @@ public class Main {
 //        t.showTheaters();
 
         //the date part is not working idk which one to use can you fix it?
-        ShowTime s = new ShowTime();
-        s.insertShowTime(1,1,new Timestamp(System.currentTimeMillis()));
-        s.showShowtimes();
+        //ShowTime s = new ShowTime();
+        //s.insertShowTime(1,1,new Timestamp(System.currentTimeMillis()));
+        //s.showShowtimes();
 
     }
 }
+
+
+
+//BURNER CODE
+

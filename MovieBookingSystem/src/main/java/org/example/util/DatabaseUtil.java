@@ -7,26 +7,35 @@ import java.util.List;
 import java.util.Map;
 
 public class DatabaseUtil {
-    private static final String BASE_URL = "jdbc:sqlite:C:\\Users\\santh\\Documents\\GitHub\\Project_ProgPatterns\\MovieBookingSystem\\src\\main\\java\\org\\example\\resources\\data.db";
+    //private static final String BASE_URL = "jdbc:sqlite:C:\\Users\\santh\\Documents\\GitHub\\Project_ProgPatterns\\MovieBookingSystem\\src\\main\\java\\org\\example\\resources\\data.db";
+    private static final String BASE_URL = "jdbc:sqlite:./src/main/resources/database/data.db";
 
+    //IMPORTANT NOTES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //AUTO_INCREMENTS might not work
+    //remove admin table???
+
+    //done
     private static final String ACCOUNT_TABLE = """
             CREATE TABLE IF NOT EXISTS Account (
-            accountId INTEGER PRIMARY KEY AUTOINCREMENT,
+            accountId INTEGER AUTO_INCREMENT,
             password VARCHAR(255),
             status VARCHAR(255),
             email VARCHAR(255),
-            phone VARCHAR(15)
+            phone VARCHAR(15),
+            PRIMARY KEY (accountId)
             );
             """;
     //accountId INT AUTO_INCREMENT,
     //PRIMARY KEY (accountId)
 
+    //done
     //I changed this a bit because we have so much repeating stuff  from account
     private static final String PAYMENT_TABLE = """
             CREATE TABLE IF NOT EXISTS Payment (
-            paymentId INTEGER PRIMARY KEY AUTOINCREMENT,
+            paymentId INTEGER AUTO_INCREMENT,
             amount DECIMAL(10,2),
             accountId INT,
+            PRIMARY KEY (paymentId),
             FOREIGN KEY (accountId) REFERENCES Account(accountId)
             );
             """;
@@ -41,69 +50,90 @@ public class DatabaseUtil {
     //            FOREIGN KEY (accountId)
     //            );
 
+    //done
     private static final String CUSTOMER_TABLE = """
             CREATE TABLE IF NOT EXISTS Customer (
-            userId INTEGER PRIMARY KEY AUTOINCREMENT,
+            userId INTEGER AUTO_INCREMENT,
             name VARCHAR(255),
             address VARCHAR(255),
             email VARCHAR(255),
             phone VARCHAR(15),
             accountId VARCHAR(255),
+            PRIMARY KEY (userId),
             FOREIGN KEY (accountId) REFERENCES Account(accountId)
             );
             """;
-    ///CUSTOMER TYPE?(like people in wheelchair and stuff)
+    ///CUSTOMER TYPE?(like people in wheelchair and stuff) //Why would we need that
     //userId INT AUTO_INCREMENT,
     //PRIMARY KEY (userId)
     //            FOREIGN KEY (accountId)
 
+    //done
     private static final String BOOKING_TABLE = """
             CREATE TABLE IF NOT EXISTS Booking (
-            bookingId INTEGER PRIMARY KEY AUTOINCREMENT,
+            bookingId INTEGER AUTO_INCREMENT,
             userId INT,
             showTimeId INT,
+            PRIMARY KEY (bookingId),
             FOREIGN KEY (userId) REFERENCES Customer(UserId),
-            FOREIGN KEY (showTimeId) REFERENCES ShowTimes(showTimeId)
+            FOREIGN KEY (showTimeId) REFERENCES Showing(showTimeId)
             );
             """;
     //bookingId INT AUTO_INCREMENT,
 
+    //done
     private static final String THEATRE_TABLE = """
             CREATE TABLE IF NOT EXISTS Theater (
-            theaterID INTEGER PRIMARY KEY AUTOINCREMENT,
+            theaterId INTEGER AUTO_INCREMENT,
             location VARCHAR(255),
-            SeatingCapacity INT
+            PRIMARY KEY (theaterId)
             );
             """;
     //SeatingCapacity VARCHAR(255),
 
-    private static final String SHOWTIME_TABLE = """
-            CREATE TABLE IF NOT EXISTS ShowTimes (
-            ShowtimeID INTEGER PRIMARY KEY AUTOINCREMENT,
-            MovieID INT,
-            TheaterID INT,
-            Showtime DATETIME,
-            FOREIGN KEY (MovieID) REFERENCES Movies(MovieID),
-            FOREIGN KEY (TheaterID) REFERENCES Theaters(TheaterID)
+    //done
+    private static final String CINEMA_HALL_TABLE = """
+            CREATE TABLE IF NOT EXISTS CinemaHall (
+            cinemaHallId INTEGER AUTO_INCREMENT,
+            theaterId INT,
+            PRIMARY KEY (cinemaHallId),
+            FOREIGN KEY (theaterId) REFERENCES Theater(theaterId)
             );
             """;
 
+    //done
+    private static final String SHOWING_TABLE = """
+            CREATE TABLE IF NOT EXISTS Showing (
+            showingId INTEGER AUTO_INCREMENT,
+            movieId INT,
+            cinemaHallId INT,
+            showTime DATETIME,
+            PRIMARY KEY (showingId),
+            FOREIGN KEY (movieId) REFERENCES Movie(movieId),
+            FOREIGN KEY (cinemaHallId) REFERENCES CinemaHall(cinemaHallId)
+            );
+            """;
+
+    //remove??
     private static final String ADMIN_TABLE = """
             CREATE TABLE IF NOT EXISTS Admin (
-            adminID INTEGER PRIMARY KEY AUTOINCREMENT,
+            adminId INTEGER AUTO_INCREMENT,
             username VARCHAR(255),
-            Password VARCHAR(255)
+            password VARCHAR(255),
+            PRIMARY KEY (adminId)
             );
             """;
 
+    //done
     private static final String MOVIE_TABLE = """
-            CREATE TABLE IF NOT EXISTS Movies (
-            MovieID INTEGER PRIMARY KEY AUTOINCREMENT,
-            Title VARCHAR(255),
-            Genre VARCHAR(255),
-            Rating DECIMAL(3,2),
-            Duration INT,
-            Synopsis TEXT
+            CREATE TABLE IF NOT EXISTS Movie (
+            movieId INTEGER AUTO_INCREMENT,
+            title VARCHAR(255),
+            genre VARCHAR(255),
+            rating DECIMAL(3,2),
+            duration INT,
+            synopsis TEXT,
+            PRIMARY KEY (movieId)
             );
             """;
 
@@ -173,7 +203,8 @@ public class DatabaseUtil {
         executeSql(CUSTOMER_TABLE);
         executeSql(BOOKING_TABLE);
         executeSql(THEATRE_TABLE);
-        executeSql(SHOWTIME_TABLE);
+        executeSql(CINEMA_HALL_TABLE);
+        executeSql(SHOWING_TABLE);
         executeSql(ADMIN_TABLE);
         executeSql(MOVIE_TABLE);
     }

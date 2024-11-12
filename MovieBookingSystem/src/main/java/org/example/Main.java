@@ -1,12 +1,8 @@
 package org.example;
 
-import org.example.model.Movie;
-import org.example.model.ShowTime;
-import org.example.model.Theater;
 import org.example.util.DatabaseUtil;
 
 import java.sql.Connection;
-import java.sql.Timestamp;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.

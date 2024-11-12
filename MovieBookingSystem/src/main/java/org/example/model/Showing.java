@@ -3,17 +3,16 @@ package org.example.model;
 import org.example.util.DatabaseUtil;
 
 import java.sql.Timestamp;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
-public class ShowTime {
+public class Showing {
     DatabaseUtil db = new DatabaseUtil();
 
     //showTime aint working idk which one to use for that cause there is no dateTime
-    public void insertShowTime(int MovieID, int TheaterID, Timestamp showTime) {
-        String sql = "INSERT INTO ShowTimes(MovieID, TheaterID, showtime) VALUES (?,?,?)";
-        Object[] values = {MovieID, TheaterID, showTime};
+    public void insertShowTime(int movieId, int theaterId, Timestamp showTime) {
+        String sql = "INSERT INTO ShowTimes(movieId, theaterId, showtime) VALUES (?,?,?)";
+        Object[] values = {movieId, theaterId, showTime};
         int rowsAffected = db.executeUpdate(sql, values);
         if(rowsAffected > 0) {
             System.out.println("Showtime added successfully");

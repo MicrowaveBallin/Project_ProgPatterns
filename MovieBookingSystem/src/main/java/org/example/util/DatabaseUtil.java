@@ -18,11 +18,13 @@ public class DatabaseUtil {
     private static final String ACCOUNT_TABLE = """
             CREATE TABLE IF NOT EXISTS Account (
             accountId INTEGER AUTO_INCREMENT,
+            userId INT,
             password VARCHAR(255),
             status VARCHAR(255),
             email VARCHAR(255),
             phone VARCHAR(15),
-            PRIMARY KEY (accountId)
+            PRIMARY KEY (accountId),
+            FOREIGN KEY (userId) REFERENCES Customer(userId)
             );
             """;
     //accountId INT AUTO_INCREMENT,
@@ -58,9 +60,7 @@ public class DatabaseUtil {
             address VARCHAR(255),
             email VARCHAR(255),
             phone VARCHAR(15),
-            accountId VARCHAR(255),
-            PRIMARY KEY (userId),
-            FOREIGN KEY (accountId) REFERENCES Account(accountId)
+            PRIMARY KEY (userId)
             );
             """;
     ///CUSTOMER TYPE?(like people in wheelchair and stuff) //Why would we need that

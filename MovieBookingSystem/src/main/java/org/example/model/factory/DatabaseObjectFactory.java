@@ -8,7 +8,13 @@ import java.sql.SQLException;
 public class DatabaseObjectFactory {
 
     public static Client createCustomer(ResultSet rs) throws SQLException {
-        return null;
+        return new Client(
+                rs.getInt("userId"),
+                rs.getString("name"),
+                rs.getString("address"),
+                rs.getString("email"),
+                rs.getString("phone")
+        );
     }
 
 

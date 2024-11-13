@@ -17,8 +17,12 @@ public class Main {
         //create controllers
         ClientController clientController = new ClientController(connection);
 
+        //get clients from database
+        System.out.println("clients");
+        System.out.println(clientController.getClients());
+
         //add a client to the database
-        Client c1 = new Client("Frank", "125 Pebbles", "pebsi@greatproblem.it","5146900331");
+        Client c1 = new Client("Dink", "125 Pebbles", "pebsi@greatproblem.it","5146900331");
         clientController.insertClient(c1);
 
         System.out.println(DatabaseUtil.selectFromCustomer());

@@ -21,15 +21,18 @@ public class ClientController extends Controller {
         super(connection);
     }
 
+    // throws SQLException in notes ???????
     //get clients in a list format
-    public List<Client> getAllClients() throws SQLException {
+    public List<Client> getClients() {
         this.clients = new ArrayList<>();
-        String sql = "SELECT * FROM customers";
+        String sql = "SELECT * FROM Customer";
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 clients.add(DatabaseObjectFactory.createCustomer(rs));
             }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
         return clients;
     }
@@ -41,7 +44,7 @@ public class ClientController extends Controller {
         try (
                 Connection conn = DatabaseUtil.connect();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, client.getId());
+            pstmt.setInt(1, client.getId());
             pstmt.setString(2, client.getName());
             pstmt.setString(3, client.getAddress());
             pstmt.setString(4, client.getEmail());

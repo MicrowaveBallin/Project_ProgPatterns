@@ -11,7 +11,7 @@ import static org.example.util.DatabaseUtil.connect;
 public class Client extends Person {
 
     private static int idCounter = 1;
-    private String id = "";
+    private int id;
     private String name;
     private String address;
     private String email;
@@ -19,7 +19,7 @@ public class Client extends Person {
 
     //without id
     public Client(String name, String address, String email, String phone) {
-        this.id += idCounter++;
+        this.id = idCounter++;
         this.name = name;
         this.address = address;
         this.email = email;
@@ -27,7 +27,7 @@ public class Client extends Person {
     }
 
     //with id, for creation from database
-    public Client(String phone, String email, String address, String name, String id) {
+    public Client(int id, String name,String address, String email, String phone) {
         idCounter++;
         this.id = id;
         this.phone = phone;
@@ -36,7 +36,7 @@ public class Client extends Person {
         this.name = name;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 

@@ -189,7 +189,7 @@ public class DatabaseUtil {
                 String email = rs.getString("email");
                 String phone = rs.getString("phone");
 
-                builder.append(String.format("Customer{ ID: %d, Name: %s, Address: %s, Email: %s, Phone: %s}", id, name, address, email, phone));
+                builder.append(String.format("Customer{ ID: %d, Name: %s, Address: %s, Email: %s, Phone: %s}\n", id, name, address, email, phone));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

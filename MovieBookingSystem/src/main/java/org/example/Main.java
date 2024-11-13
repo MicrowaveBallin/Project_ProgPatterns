@@ -15,7 +15,7 @@ public class Main {
         DatabaseUtil.createAllTables();
 
         //create controllers
-        ClientController clientController = new ClientController();
+        ClientController clientController = new ClientController(connection);
 
         //add a client to the database
         Client c1 = new Client("Frank", "125 Pebbles", "pebsi@greatproblem.it","5146900331");

@@ -1,20 +1,43 @@
 package org.example.controller;
 
 import org.example.model.Client;
+import org.example.model.factory.DatabaseObjectFactory;
 import org.example.util.DatabaseUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.example.util.DatabaseUtil.connect;
 
-public class ClientController {
+public class ClientController extends Controller {
+
+    private List<Client> clients; ///MAP MAYBE???????????
+
+    //WARNINGS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //Move database stuff into DatabaseUtil???
+
+    public ClientController(Connection connection) {
+        super(connection);
+    }
+
+    //get clients in a list format
+    public List<Client> getAllClients() throws SQLException {
+        this.clients = new ArrayList<>();
+        String sql = "SELECT * FROM customers";
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                clients.add(DatabaseObjectFactory.createCustomer(rs));
+            }
+        }
+        return clients;
+    }
+
 
     //TRYING EXPERIMENTAL FROM NOTES
     public boolean insertClient(Client client) {
         String sql = "INSERT INTO Customer (userId ,name, address, email, phone) VALUES (?, ?, ?, ?, ?)";
-
         try (
                 Connection conn = DatabaseUtil.connect();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {

@@ -10,13 +10,14 @@ import static org.example.util.DatabaseUtil.connect;
 
 public class Client extends Person {
 
-    private static int idCounter = 0;
+    private static int idCounter = 1;
     private String id = "";
     private String name;
     private String address;
     private String email;
     private String phone;
 
+    //without id
     public Client(String name, String address, String email, String phone) {
         this.id += idCounter++;
         this.name = name;
@@ -25,36 +26,33 @@ public class Client extends Person {
         this.phone = phone;
     }
 
-    //TRYIMG EXPERIMENTAL FROM NOTES
-//    String sql = "INSERT INTO students(name, age) VALUES(?, ?)";
-//
-//    try (
-//    Connection conn = connect();
-//    PreparedStatement pstmt = conn.prepareStatement(sql)) {
-//        pstmt.setString(1, name);
-//        pstmt.setInt(2, age);
-//        pstmt.executeUpdate();
-//        System.out.println("Data inserted successfully.");
-//    } catch (
-//    SQLException e) {
-//        System.out.println(e.getMessage());
-//    }
-
-    //NOT WORKING YET OLD CODE
-//    public void insertClient() {
-//        String sql = "INSERT INTO Client(accountId, userId, password) VALUES (" +
-//                this.id + "," + client.getId() + "," + this.password + ")";
-//        Object[] values = {movieId, theaterId, showTime};
-//        int rowsAffected = db.executeUpdate(sql, values);
-//        if(rowsAffected > 0) {
-//            System.out.println("Account added successfully");
-//        } else {
-//            System.out.println("Account added failed");
-//        }
-
-
+    //with id, for creation from database
+    public Client(String phone, String email, String address, String name, String id) {
+        idCounter++;
+        this.id = id;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.name = name;
+    }
 
     public String getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPhone() {
+        return phone;
     }
 }

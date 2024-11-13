@@ -148,6 +148,18 @@ public class DatabaseUtil {
         return connection;
     }
 
+    public static void createAllTables() {
+        executeSql(ACCOUNT_TABLE);
+        executeSql(PAYMENT_TABLE);
+        executeSql(CUSTOMER_TABLE);
+        executeSql(BOOKING_TABLE);
+        executeSql(THEATRE_TABLE);
+        executeSql(CINEMA_HALL_TABLE);
+        executeSql(SHOWING_TABLE);
+        executeSql(ADMIN_TABLE);
+        executeSql(MOVIE_TABLE);
+    }
+
     private static boolean executeSql(String sql) {
         try (Connection conn = connect();
              Statement stmt = conn.createStatement()) {
@@ -159,6 +171,33 @@ public class DatabaseUtil {
         }
         return false;
     }
+
+    //reads from database and turns into plain text
+    public static String selectFromCustomer() {
+        String sql = "SELECT * FROM Customer";
+
+        StringBuilder builder = new StringBuilder();
+        try (Connection conn = connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            // Loop through the result set
+            while (rs.next()) {
+                int id = rs.getInt("userId");
+                String name = rs.getString("name");
+                String address = rs.getString("address");
+                String email = rs.getString("email");
+                String phone = rs.getString("phone");
+
+                builder.append(String.format("Customer{ ID: %d, Name: %s, Address: %s, Email: %s, Phone: %s}", id, name, address, email, phone));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return builder.toString();
+    }
+
 
     //Dont remove it we need the executeUpdate and getRecord
     //executeUpdate helps send changes to the database, we use it to safely send the data and handle any errors.
@@ -197,17 +236,7 @@ public class DatabaseUtil {
         return records;
     }
 
-    public static void createAllTables() {
-        executeSql(ACCOUNT_TABLE);
-        executeSql(PAYMENT_TABLE);
-        executeSql(CUSTOMER_TABLE);
-        executeSql(BOOKING_TABLE);
-        executeSql(THEATRE_TABLE);
-        executeSql(CINEMA_HALL_TABLE);
-        executeSql(SHOWING_TABLE);
-        executeSql(ADMIN_TABLE);
-        executeSql(MOVIE_TABLE);
-    }
+
 
     public static final String INSERT_SQL = """
             INSERT INTO students VALUES(1, "MIKE", 18)

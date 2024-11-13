@@ -19,8 +19,10 @@ public class Main {
 
         //add a client to the database
         Client c1 = new Client("Frank", "125 Pebbles", "pebsi@greatproblem.it","5146900331");
-        Client c2 = new Client("Frank", "125 Pebbles", "pebsi@greatproblem.it","5146900331");
         clientController.insertClient(c1);
+
+        System.out.println(DatabaseUtil.selectFromCustomer());
+
 
     }
 }

@@ -21,18 +21,10 @@ public class Movie {
 
     private DatabaseUtil db = new DatabaseUtil();
 
-    public Movie(String title, int duration, double rating, String genre, String synopsis) {
-        this.title = title;
-        this.duration = duration;
-        this.rating = rating;
-        this.genre = genre;
-        this.synopsis = synopsis;
-    }
-
 
     //Methods to insert movies into database
-    public void insertMovie() {
-        String sql = "INSERT INTO Movies(title, genre, rating,duration,synopsis) VALUES(?,?,?,?,?)";
+    public void insertMovie(String title, String genre, double rating, int duration, String synopsis) {
+        String sql = "INSERT INTO Movies(title, genre, rating, duration, synopsis) VALUES(?,?,?,?,?)";
         Object[] values = {title, genre, rating, duration, synopsis};
         int rowAffected = db.executeUpdate(sql, values);
         if (rowAffected > 0) {

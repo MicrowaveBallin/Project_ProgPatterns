@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 public class DatabaseUtil {
-    //private static final String BASE_URL = "jdbc:sqlite:C:\\Users\\santh\\Documents\\GitHub\\Project_ProgPatterns\\MovieBookingSystem\\src\\main\\java\\org\\example\\resources\\data.db";
-    private static final String BASE_URL = "jdbc:sqlite:./src/main/resources/database/data.db";
+    private static final String BASE_URL = "jdbc:sqlite:C:\\Users\\santh\\Documents\\GitHub\\Project_ProgPatterns\\MovieBookingSystem\\src\\main\\resources\\database\\data.db";
+    //private static final String BASE_URL = "jdbc:sqlite:./src/main/resources/database/data.db";
 
     //IMPORTANT NOTES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //AUTO_INCREMENTS might not work
@@ -84,9 +84,9 @@ public class DatabaseUtil {
     //done
     private static final String THEATRE_TABLE = """
             CREATE TABLE IF NOT EXISTS Theater (
-            theaterId INTEGER AUTO_INCREMENT,
+            theaterId INTEGER PRIMARY KEY AUTO_INCREMENT,
             location VARCHAR(255),
-            PRIMARY KEY (theaterId)
+            SeatCapacity INT
             );
             """;
     //SeatingCapacity VARCHAR(255),
@@ -104,11 +104,10 @@ public class DatabaseUtil {
     //done
     private static final String SHOWING_TABLE = """
             CREATE TABLE IF NOT EXISTS Showing (
-            showingId INTEGER AUTO_INCREMENT,
+            showingId INTEGER PRIMARY KEY AUTO_INCREMENT,
             movieId INT,
             cinemaHallId INT,
             showTime DATETIME,
-            PRIMARY KEY (showingId),
             FOREIGN KEY (movieId) REFERENCES Movie(movieId),
             FOREIGN KEY (cinemaHallId) REFERENCES CinemaHall(cinemaHallId)
             );
@@ -127,8 +126,8 @@ public class DatabaseUtil {
     //done
     private static final String MOVIE_TABLE = """
             CREATE TABLE IF NOT EXISTS Movie (
-            movieId INTEGER AUTO_INCREMENT,
-            title VARCHAR(255),
+            movieId INTEGER PRIMARY KEY AUTOINCREMENT,
+            title VARCHAR(255) NOT NULL,
             genre VARCHAR(255),
             rating DECIMAL(3,2),
             duration INT,
@@ -137,15 +136,36 @@ public class DatabaseUtil {
             );
             """;
 
+//    public static Connection connect() {
+//        Connection connection = null; ///????  null
+//        try {
+//            connection = DriverManager.getConnection(BASE_URL);
+//            System.out.println("Connection to SQLite has been established.");
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//        }
+//        return connection;
+//    }
+
     public static Connection connect() {
-        Connection connection = null; ///????  null
         try {
-            connection = DriverManager.getConnection(BASE_URL);
-            System.out.println("Connection to SQLite has been established.");
+            return DriverManager.getConnection(BASE_URL);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println("Connection failed: " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
-        return connection;
+    }
+
+    // Optional method to close connections, if needed
+    public static void closeConnection(Connection connection) {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                System.err.println("Failed to close connection: " + e.getMessage());
+            }
+        }
     }
 
     public static void createAllTables() {
@@ -201,7 +221,7 @@ public class DatabaseUtil {
 
     //Dont remove it we need the executeUpdate and getRecord
     //executeUpdate helps send changes to the database, we use it to safely send the data and handle any errors.
-    public int executeUpdate(String sql, Object[] values) {
+    /*public int executeUpdate(String sql, Object[] values) {
         int rowsAffected = 0;
         try(Connection conn = connect();
             PreparedStatement ps = conn.prepareStatement(sql)){
@@ -213,7 +233,22 @@ public class DatabaseUtil {
             e.printStackTrace();
         }
         return rowsAffected;
+    }*/
+
+    public int executeUpdate(String sql, Object[] values) {
+        int rowsAffected = 0;
+        try(Connection conn = connect();
+        PreparedStatement ps = conn.prepareStatement(sql)) {
+            for(int i = 0; i < values.length; i++) {
+                ps.setObject(i + 1, values[i]);
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return rowsAffected;
     }
+
+
 
     //this makes sure to get all the data from the database and convert it into a format, so i think we can work with it easily
     public List<Map<String,Object>> getRecords(String sql) {
@@ -236,10 +271,141 @@ public class DatabaseUtil {
         return records;
     }
 
-
-
     public static final String INSERT_SQL = """
             INSERT INTO students VALUES(1, "MIKE", 18)
-   
     """;
+
+    public int getSeatingCapacity(String sql, int parameter){
+        int record = 0;
+        try(Connection conn = connect();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1,parameter);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                record = rs.getInt("SeatCapacity");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return record;
+    }
+
+    public ArrayList<Integer> getBookedSeats(int showtimeID){
+        String sql = "SELECT selectedSeats from bookings where showtimeID = ?";
+        ArrayList<Integer> bookedSeats = new ArrayList<>();
+        try(Connection conn = connect();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1,showtimeID);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                bookedSeats.add(rs.getInt("SelectedSeats"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return bookedSeats;
+    }
+
+
+    public ArrayList<Integer> getShowtimeDetailsForUser(int userID,int showtimeID){
+        String sql = "SELECT SelectedSeats from bookings where ShowtimeID = ?";
+        ArrayList<Integer> bookedSeats = new ArrayList<>();
+
+        try(Connection conn = connect();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setInt(1, showtimeID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                bookedSeats.add(rs.getInt("SelectedSeats"));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return bookedSeats;
+    }
+
+    public void getAllBookingsForUser(int userID){
+        String sql = "SELECT * from bookings where userid =?";
+        try(Connection conn = connect();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setInt(1, userID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                System.out.println("----- Booking Details -----");
+                System.out.println("Booking ID: "+rs.getInt("BookingID"));
+                System.out.println("Showtime ID: "+rs.getInt("ShowtimeID"));
+                System.out.println("Seat number: "+rs.getInt("SelectedSeats"));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void getShowtimeDetails(String sql,int showingId){
+        try(Connection conn = connect();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setInt(1, showingId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int showtimeID_sql = rs.getInt("ShowtimeID");
+                String title = rs.getString("Title");
+                int duration = rs.getInt("Duration");
+                Time showtime = rs.getTime("Showtime");
+                System.out.println("ShowtimeID: " + showtimeID_sql + ", Title: " + title + ", Duration: " + duration + ", Showtime: " + showtime);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public int removeBooking(int bookingID){
+        //enter any booking id and works
+        //future scope : to verify if booking is users or not
+        String sql = "DELETE from bookings where BookingID =?";
+        int rowsAffected = 0;
+        try(Connection conn = connect();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setInt(1, bookingID);
+            rowsAffected = ps.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return rowsAffected;
+    }
+
+    public String validatePass(String sql,String username){
+        String pass = "";
+        try(Connection conn = connect();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                pass = rs.getString("password");
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return pass;
+    }
+
+    public int fetchUserID(String sql , String username){
+        int userID = 0;
+        try(Connection conn = connect();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                userID = rs.getInt("UserID");
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return userID;
+    }
 }
+
+

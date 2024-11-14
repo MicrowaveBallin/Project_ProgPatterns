@@ -6,33 +6,38 @@ import org.example.util.DatabaseUtil;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.example.util.DatabaseUtil.connect;
 
 public class ClientController extends Controller {
 
-    private List<Client> clients; ///MAP MAYBE???????????
+    private Map<Integer, Client> clients; ///MAP MAYBE???????????
 
     //WARNINGS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //Move database stuff into DatabaseUtil???
 
     public ClientController(Connection connection) {
+
         super(connection);
+        this.clients = new HashMap<>();
     }
 
     // throws SQLException in notes ???????
     //get clients in a list format
-    public List<Client> getClients() {
-        this.clients = new ArrayList<>();
+    public Map<Integer, Client> getClients() {
+        //this.clients = new ArrayList<>();
         String sql = "SELECT * FROM Customer";
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                clients.add(DatabaseObjectFactory.createCustomer(rs));
+                Client client = DatabaseObjectFactory.createCustomer(rs);
+                clients.put(client.getId(), client);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error fetching clients: " + e.getMessage());
         }
         return clients;
     }
@@ -51,10 +56,11 @@ public class ClientController extends Controller {
             pstmt.setString(5, client.getPhone());
             pstmt.executeUpdate();
             System.out.println("Client inserted successfully.");
+            return true;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return true;
+        return false;
     }
 
 

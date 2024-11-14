@@ -14,7 +14,7 @@ public class Booking {
     public void bookTicket(int userID){
         // display the list of showtime to user
         System.out.println("Avaialbe showtimes:");
-        s.showShowtimes();
+        s.displayShowing();
         System.out.println("Enter your showtime choice: ");
 
         // ask their selection and then fetch theater seating capacity

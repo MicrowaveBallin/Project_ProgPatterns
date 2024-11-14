@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class Account {
 
-    private static int idCounter = 0;
-    private String id;
+    private static int idCounter = 1;
+    private int id;
     private String password;
     private AccountStatus status;
     private Client client;
@@ -17,7 +17,7 @@ public class Account {
 
 
     public Account(Client client, String password) {
-        this.id = String.valueOf(idCounter++);
+        this.id = idCounter++;
         this.password = password;
         this.status = AccountStatus.ACTIVE;
         this.paymentHistory = new HashMap();

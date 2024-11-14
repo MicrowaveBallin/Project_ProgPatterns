@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 public class DatabaseUtil {
-    private static final String BASE_URL = "jdbc:sqlite:C:\\Users\\santh\\Documents\\GitHub\\Project_ProgPatterns\\MovieBookingSystem\\src\\main\\resources\\database\\data.db";
-    //private static final String BASE_URL = "jdbc:sqlite:./src/main/resources/database/data.db";
+    //private static final String BASE_URL = "jdbc:sqlite:C:\\Users\\santh\\Documents\\GitHub\\Project_ProgPatterns\\MovieBookingSystem\\src\\main\\resources\\database\\data.db";
+    private static final String BASE_URL = "jdbc:sqlite:./src/main/resources/database/data.db";
 
     //IMPORTANT NOTES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //AUTO_INCREMENTS might not work
@@ -86,7 +86,6 @@ public class DatabaseUtil {
             CREATE TABLE IF NOT EXISTS Theater (
             theaterId INTEGER PRIMARY KEY AUTO_INCREMENT,
             location VARCHAR(255),
-            SeatCapacity INT
             );
             """;
     //SeatingCapacity VARCHAR(255),
@@ -96,6 +95,7 @@ public class DatabaseUtil {
             CREATE TABLE IF NOT EXISTS CinemaHall (
             cinemaHallId INTEGER AUTO_INCREMENT,
             theaterId INT,
+            SeatCapacity INT,
             PRIMARY KEY (cinemaHallId),
             FOREIGN KEY (theaterId) REFERENCES Theater(theaterId)
             );
@@ -116,7 +116,7 @@ public class DatabaseUtil {
     //remove??
     private static final String ADMIN_TABLE = """
             CREATE TABLE IF NOT EXISTS Admin (
-            adminId INTEGER AUTO_INCREMENT,
+            adminId INTEGER AUTOINCREMENT,
             username VARCHAR(255),
             password VARCHAR(255),
             PRIMARY KEY (adminId)

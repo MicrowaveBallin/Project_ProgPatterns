@@ -24,7 +24,7 @@ public class User {
             switch(choice){
                 //to see all movies
                 case 1:
-                    st.showShowtimes();
+                    st.displayShowing();
                     break;
 
                 //book a ticket

@@ -79,7 +79,7 @@ public class Admin extends User {
                     break;
                 case 4:
                     //see all showtimes
-                    st.showShowtimes();
+                    st.displayShowing();
                     break;
                 case 5:
                     //add theaters

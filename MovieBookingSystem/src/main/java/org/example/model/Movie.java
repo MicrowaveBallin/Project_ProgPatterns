@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.example.util.DatabaseUtil.connect;
+//import static org.example.util.DatabaseUtil.connect;
 
 public class Movie {
     //WORKING
@@ -42,7 +42,7 @@ public class Movie {
     // Method to insert a movie into the Movies table in the database
     public void insertMovie() {
         String sql = "INSERT INTO Movie (title, genre, rating, duration, synopsis) VALUES (?, ?, ?, ?, ?)";
-        try (Connection connection = DatabaseUtil.connect();
+        try (Connection connection = DatabaseUtil.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, title);
             pstmt.setString(2, genre);
@@ -65,7 +65,7 @@ public class Movie {
     public static List<Movie> showMovies() {
         String sql = "SELECT * FROM Movie";
         List<Movie> movies = new ArrayList<>();
-        try (Connection connection = DatabaseUtil.connect();
+        try (Connection connection = DatabaseUtil.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 

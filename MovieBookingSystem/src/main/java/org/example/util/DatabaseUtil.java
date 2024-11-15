@@ -2,6 +2,7 @@ package org.example.util;
 
 import org.example.model.Account;
 import org.example.model.Client;
+import org.example.model.Payment;
 import org.example.model.factory.DatabaseObjectFactory;
 
 import java.sql.*;
@@ -13,6 +14,7 @@ import java.util.Map;
 public class DatabaseUtil {
     //private static final String BASE_URL = "jdbc:sqlite:C:\\Users\\santh\\Documents\\GitHub\\Project_ProgPatterns\\MovieBookingSystem\\src\\main\\resources\\database\\data.db";
     private static final String BASE_URL = "jdbc:sqlite:./src/main/resources/database/data.db";
+    private static Connection connection;
 
     //IMPORTANT NOTES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //put all READING function in Controller classes here and make them static
@@ -123,7 +125,17 @@ public class DatabaseUtil {
 
     //=============================== GENERAL =================================
 
-    public static Connection connect() {
+    public static Connection getConnection() {
+        if (connection == null) {
+            connection = connect();
+            return connection;
+        } else {
+            return connection;
+        }
+    }
+
+
+    private static Connection connect() {
         try {
             return DriverManager.getConnection(BASE_URL);
         } catch (SQLException e) {
@@ -205,10 +217,8 @@ public class DatabaseUtil {
 
     // =============================================== TABLE/CLASS SPECIFIC ==================================
 
-    //Client
+    //CLIENT
 
-    // move to Databse util
-    //get clients in a list format
     public static Map<Integer, Client> getClients(Connection conn) {
         Map<Integer, Client> clients = new HashMap<>();
         String sql = "SELECT * FROM Client";
@@ -223,6 +233,25 @@ public class DatabaseUtil {
         }
         return clients;
     }
+
+    //Nick finsih work here <-----------------------------------------------------------
+//
+//    public static List<Payment> getPayments(Connection conn,) {
+//        List<Payment> payments = new ArrayList<>();
+//        String sql = "SELECT * FROM Payments WHERE paymentId = " + ;
+//        try (Statement stmt = conn.createStatement();
+//             ResultSet rs = stmt.executeQuery(sql)) {
+//            while (rs.next()) {
+//                Client client = DatabaseObjectFactory.createClient(rs);
+//                clients.put(client.getId(), client);
+//            }
+//        } catch (SQLException e) {
+//            System.out.println("Error fetching clients: " + e.getMessage());
+//        }
+//        return clients;
+//    }
+
+
 
     //reads from database and turns into plain text
     public static String selectFromClient() {
@@ -250,22 +279,7 @@ public class DatabaseUtil {
         return builder.toString();
     }
 
-    //ACCOUNT
-    //move to util
-    public static Map<Integer, Account> getAccount(Connection connection) {
-        Map<Integer, Account> accounts = new HashMap<>();
-        String sql = "SELECT * FROM Account";
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                Account account = DatabaseObjectFactory.createAccount(rs);
-                accounts.put(account.getId(), account);
-            }
-        } catch (SQLException e) {
-            System.out.println("Error fetching clients: " + e.getMessage());
-        }
-        return accounts;
-    }
+
 
 
 
@@ -446,6 +460,28 @@ public class DatabaseUtil {
         return records;
     }
 }
+
+
+//
+//
+////ACCOUNT
+////move to util
+//public static Map<Integer, Account> getAccount(Connection connection) {
+//    Map<Integer, Account> accounts = new HashMap<>();
+//    String sql = "SELECT * FROM Account";
+//    try (Statement stmt = connection.createStatement();
+//         ResultSet rs = stmt.executeQuery(sql)) {
+//        while (rs.next()) {
+//            Account account = DatabaseObjectFactory.createAccount(rs);
+//            accounts.put(account.getId(), account);
+//        }
+//    } catch (SQLException e) {
+//        System.out.println("Error fetching clients: " + e.getMessage());
+//    }
+//    return accounts;
+//}
+
+
 
 
 

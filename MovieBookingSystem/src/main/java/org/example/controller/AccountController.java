@@ -22,7 +22,7 @@ public class AccountController extends Controller {
     public boolean insertClient(Client client) {
         String sql = "INSERT INTO Customer (userId ,name, address, email, phone) VALUES (?, ?, ?, ?, ?)";
         try (
-                Connection conn = DatabaseUtil.connect();
+                Connection conn = DatabaseUtil.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, client.getId());
             pstmt.setString(2, client.getName());

@@ -20,16 +20,15 @@ import java.util.Map;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        //connect database
-        Connection connection = DatabaseUtil.connect();
+        //Create tables
         DatabaseUtil.createAllTables();
 
         //create controllers
-        ClientController clientController = new ClientController(connection);
+        ClientController clientController = new ClientController(DatabaseUtil.getConnection());
 
         //get clients from database
         System.out.println("clients");
-        System.out.println(DatabaseUtil.getClients(connection));
+        System.out.println(DatabaseUtil.getClients(DatabaseUtil.getConnection()));
 
         //add a client to the database
         Client c1 = new Client("Dink", "12345", "125 Pebbles", "pebsi@greatproblem.it","5146900331");

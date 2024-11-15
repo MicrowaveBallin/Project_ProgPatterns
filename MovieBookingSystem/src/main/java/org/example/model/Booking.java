@@ -1,80 +1,65 @@
 package org.example.model;
 
+import org.example.controller.ShowingController;
 import org.example.util.DatabaseUtil;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Booking {
-    Showing s = new Showing();
-    DatabaseUtil db = new DatabaseUtil();
-    Scanner sc = new Scanner(System.in);
+    private int bookingId;
+    private int userId;
+    private int showTimeId;
+    private DatabaseUtil db;
 
+    public Booking() {
+        db = new DatabaseUtil();
+    }
 
-    public void bookTicket(int userID){
-        // display the list of showtime to user
-        System.out.println("Avaialbe showtimes:");
-        s.displayShowing();
-        System.out.println("Enter your showtime choice: ");
+    // Getters and setters
+    public int getBookingId() {
+        return bookingId;
+    }
 
-        // ask their selection and then fetch theater seating capacity
-        int showtime_choice = sc.nextInt();
-        //from showtime table fetch theater id and then for that theater fetch seating capacity
-        int capacity = s.getTheaterCapacity(showtime_choice);
-        // then from bookings table fetch already booked tickets for current movie
-        ArrayList<Integer> bookedSeats = db.getBookedSeats(showtime_choice);
-        // display numbers for available seats and X for unavailable
-        //display 8 columns
-        // 1 2 x 4 5 x x 8
-        // 9 x 11 12 x x 15 x
-        System.out.println("---------- Available Seats ----------");
-        for (int i = 1 ; i<= capacity ; i++){
-            if(bookedSeats.contains(i)){
-                System.out.print("X ");
-            }else{
-                System.out.print(i + " ");
-            }
+    public void setBookingId(int bookingId) {
+        this.bookingId = bookingId;
+    }
 
-            if(i %8 == 0){
-                System.out.println();
-            }
-        }
+    public int getUserId() {
+        return userId;
+    }
 
-        //enter the seat of your choice
-        System.out.println("Enter the seat of your choice: ");
-        int seat_choice = sc.nextInt();
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
-        //redirect to payment portal
+    public int getShowTimeId() {
+        return showTimeId;
+    }
 
-        //insert their booking info in bookings table
-        String sql = "insert into bookings(userid,showtimeid,selectedseats,paymentstatus) values(?,?,?,1)";
-        Object[] values = {userID,showtime_choice,seat_choice};
+    public void setShowTimeId(int showTimeId) {
+        this.showTimeId = showTimeId;
+    }
+
+    // Method to create a booking in the database
+    public boolean createBooking(int userId, int showTimeId, int seatChoice) {
+        String sql = "INSERT INTO Booking(userId, showTimeId) VALUES(?, ?)";
+        Object[] values = {userId, showTimeId};
         int rowsAffected = db.executeUpdate(sql, values);
-        if(rowsAffected>0)
-            System.out.println("Booking completed successfully");
-        else
-            System.out.println("Something went wrong.Booking failed.");
+
+        return rowsAffected > 0;
     }
 
-    public void seeTicket(int userID){
-        System.out.println("Tickets Booked at different showtimes:");
-        db.getAllBookingsForUser(userID);
-        System.out.print("Enter ShowtimeID to know information: ");
-        int showtimeID_choice = sc.nextInt();
-        s.showShowtimesDetails(showtimeID_choice);
+    // Method to retrieve all bookings for a user
+    public void getAllBookingsForUser(int userId) {
+        String sql = "SELECT * FROM Booking WHERE userId = ?";
+        db.executeQuery(sql, new Object[]{userId});
     }
 
-    public void cancelTicket(int userID){
-        System.out.println("Tickets Booked at different showtimes:");
-        db.getAllBookingsForUser(userID);
-        System.out.print("Enter BookingID to cancel Booking: ");
-
-        //saving the bookings details
-        int bookingID_choice = sc.nextInt();
-        int rowsAffected = db.removeBooking(bookingID_choice);
-        if(rowsAffected>0)
-            System.out.println("Booking cancelled successfully");
-        else
-            System.out.println("Something went wrong.Booking not cancelled.");
+    // Method to cancel a booking
+    public boolean cancelBooking(int bookingId) {
+        String sql = "DELETE FROM Booking WHERE bookingId = ?";
+        int rowsAffected = db.executeUpdate(sql, new Object[]{bookingId});
+        return rowsAffected > 0;
     }
 }

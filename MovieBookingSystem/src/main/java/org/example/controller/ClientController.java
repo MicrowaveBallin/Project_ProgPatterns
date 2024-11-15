@@ -64,6 +64,7 @@ public class ClientController extends Controller {
     }
 
 
+
     //NOT WORKING YET OLD CODE
 //    public void insertClient() {
 //        String sql = "INSERT INTO Client(accountId, userId, password) VALUES (" +

@@ -7,36 +7,49 @@ import java.util.List;
 import java.util.Map;
 
 public class Showing {
-    DatabaseUtil db = new DatabaseUtil();
-    public void insertShowtime(int MovieID,int TheaterID,Timestamp showtime){
-        String sql = "INSERT INTO Showing(movieId,TheaterId,showTime) VALUES(?,?,?)";
-        Object[] values = {MovieID,TheaterID,showtime};
-        int rowsAffected = db.executeUpdate(sql, values);
-        if(rowsAffected>0)
-            System.out.println("Showing added successfully");
-        else
-            System.out.println("Something went wrong. Showing not inserted.");
+    private int showingId;
+    private int movieId;
+    private int theaterId;
+    private Timestamp showTime;
 
+    // Constructor
+    public Showing(int showingId, int movieId, int theaterId, Timestamp showTime) {
+        this.showingId = showingId;
+        this.movieId = movieId;
+        this.theaterId = theaterId;
+        this.showTime = showTime;
     }
 
-    public void displayShowing(){
-        String sql = "SELECT * from Showing";
-        List<Map<String,Object>> showings = db.getRecords(sql);
-        for (Map<String, Object> showing : showings) {
-            System.out.println("Showtime ID: " + showing.get("showingId"));
-            System.out.println("Movie ID: " + showing.get("movieId"));
-            System.out.println("Theater ID: " + showing.get("theaterId"));
-            System.out.println("Showtime: " + showing.get("showTime"));
-            System.out.println("-----------------------------");
-        }
+    // Getters and Setters
+    public int getShowingId() {
+        return showingId;
     }
 
-    public void showShowtimesDetails(int showtimeID){
-        String sql = "SELECT s.ShowtimeID, m.Title,m.Duration,s.Showtime from Showing s, Movie m where s.MovieID = m.MovieID and s.ShowtimeID = ? ";
-        db.getShowtimeDetails(sql, showtimeID);
+    public void setShowingId(int showingId) {
+        this.showingId = showingId;
     }
-    public int getTheaterCapacity(int showtime){
-        String sql = "SELECT SeatingCapacity from theaters where TheaterID = (SELECT TheaterID from showtimes where ShowtimeID = ?)";
-        return db.getSeatingCapacity(sql, showtime);
+
+    public int getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
+    }
+
+    public int getTheaterId() {
+        return theaterId;
+    }
+
+    public void setTheaterId(int theaterId) {
+        this.theaterId = theaterId;
+    }
+
+    public Timestamp getShowTime() {
+        return showTime;
+    }
+
+    public void setShowTime(Timestamp showTime) {
+        this.showTime = showTime;
     }
 }

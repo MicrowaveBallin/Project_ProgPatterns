@@ -3,53 +3,59 @@ package org.example.model;
 import java.util.Scanner;
 
 public class User {
-    String name,username,password,address,phone;
-    int choice;
-    Scanner sc = new Scanner(System.in);
-    Showing st = new Showing();
-    Booking b = new Booking();
+    private String name;
+    private String username;
+    private String password;
+    private String address;
+    private String phone;
 
+    // Constructor
+    public User(String name, String username, String password, String address, String phone) {
+        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.address = address;
+        this.phone = phone;
+    }
 
-    public void userMenu(int userID){
-        while(true){
+    // Getters and Setters
+    public String getName() {
+        return name;
+    }
 
-            System.out.println("---------- User Menu ----------");
-            System.out.println("Press 1 to see all showtimes.");
-            System.out.println("Press 2 to book a ticket");
-            System.out.println("Press 3 to see ticket bookings");
-            System.out.println("Press 4 to cancel ticket booking");
-            System.out.println("Press 5 to exit.");
-            System.out.print("Enter your choice:");
-            choice = sc.nextInt();
-            switch(choice){
-                //to see all movies
-                case 1:
-                    st.displayShowing();
-                    break;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-                //book a ticket
-                case 2:
-                    b.bookTicket(userID);
-                    break;
+    public String getUsername() {
+        return username;
+    }
 
-                //see ticket bookings
-                case 3:
-                    b.seeTicket(userID);
-                    break;
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-                //cancel ticket booking
-                case 4:
-                    b.cancelTicket(userID);
-                    break;
+    public String getPassword() {
+        return password;
+    }
 
-                //exit
-                case 5:
-                    System.exit(0);
-                    break;
-                default:
-                    System.out.println("Wrong choice entered!Retry");
-                    break;
-            }
-        }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

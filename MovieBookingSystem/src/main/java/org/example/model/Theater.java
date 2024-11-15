@@ -1,40 +1,29 @@
 package org.example.model;
 
-import org.example.util.DatabaseUtil;
-
-import java.util.List;
-import java.util.Map;
-
 public class Theater {
-    private String Location;
-    private int SeatingCapacity;
+    private int theaterId;
+    private String location;
 
-    public Theater() {
-
+    // Constructor
+    public Theater(int theaterId, String location) {
+        this.theaterId = theaterId;
+        this.location = location;
     }
 
-    private DatabaseUtil db = new DatabaseUtil();
+    // Getters and Setters
+    public int getTheaterId() {
+        return theaterId;
+    }
 
-    public void insertTheater(String location, int seatingCapacity) {
-        this.Location = location;
-        this.SeatingCapacity = seatingCapacity;
-        String sql = "INSERT INTO Theater (Location, SeatingCapacity) VALUES (?, ?)";
-        Object[] values = {Location, seatingCapacity};
-        int rowsAffected = db.executeUpdate(sql,values);
-        if(rowsAffected > 0) {
-            System.out.println("Movies inserted successfully");
-        } else {
-            System.out.println("Movies insert failed");
-        }
-        }
-    public void showTheaters() {
-        String sql = "SELECT * FROM Theater";
-        List<Map<String,Object>> Theater = db.getRecords(sql);
-        for(Map<String, Object> theater : Theater) {
-            System.out.println("TheaterID: " + theater.get("TheaterID"));
-            System.out.println("Location: " + theater.get("Location"));
-            System.out.println("Seating Capacity: " + theater.get("SeatingCapacity"));
-            System.out.println("-----------------------------------------------------");
-        }
+    public void setTheaterId(int theaterId) {
+        this.theaterId = theaterId;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

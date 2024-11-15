@@ -12,79 +12,61 @@ public class DatabaseUtil {
 
     //IMPORTANT NOTES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //AUTO_INCREMENTS might not work
-    //remove admin table???
+    //remove admin table???maybe lets see at the end but not now
 
     //done
     private static final String ACCOUNT_TABLE = """
             CREATE TABLE IF NOT EXISTS Account (
-            accountId INTEGER AUTO_INCREMENT,
+            accountId INTEGER PRIMARY KEY AUTOINCREMENT,
             userId INT,
             password VARCHAR(255),
             status VARCHAR(255),
             email VARCHAR(255),
             phone VARCHAR(15),
-            PRIMARY KEY (accountId),
             FOREIGN KEY (userId) REFERENCES Customer(userId)
             );
             """;
-    //accountId INT AUTO_INCREMENT,
-    //PRIMARY KEY (accountId)
 
     //done
-    //I changed this a bit because we have so much repeating stuff  from account
+    //model class done
     private static final String PAYMENT_TABLE = """
             CREATE TABLE IF NOT EXISTS Payment (
-            paymentId INTEGER AUTO_INCREMENT,
+            paymentId INTEGER PRIMARY KEY AUTOINCREMENT,
             amount DECIMAL(10,2),
             accountId INT,
-            PRIMARY KEY (paymentId),
             FOREIGN KEY (accountId) REFERENCES Account(accountId)
             );
             """;
 
-    //CREATE TABLE IF NOT EXISTS Payment (
-    //            paymentId INT AUTO_INCREMENT,
-    //            password VARCHAR(255),
-    //            status VARCHAR(255),
-    //            email VARCHAR(255),
-    //            phone VARCHAR(15),
-    //            PRIMARY KEY (paymentId)
-    //            FOREIGN KEY (accountId)
-    //            );
-
     //done
-    private static final String CUSTOMER_TABLE = """
+    //model class done
+    private static final String CLIENT_TABLE = """
             CREATE TABLE IF NOT EXISTS Customer (
-            userId INTEGER AUTO_INCREMENT,
+            userId INTEGER PRIMARY KEY AUTOINCREMENT,
             name VARCHAR(255),
             address VARCHAR(255),
             email VARCHAR(255),
-            phone VARCHAR(15),
-            PRIMARY KEY (userId)
+            phone VARCHAR(15)
             );
             """;
-    ///CUSTOMER TYPE?(like people in wheelchair and stuff) //Why would we need that
-    //userId INT AUTO_INCREMENT,
-    //PRIMARY KEY (userId)
-    //            FOREIGN KEY (accountId)
 
     //done
+    //model and controller class done
     private static final String BOOKING_TABLE = """
             CREATE TABLE IF NOT EXISTS Booking (
-            bookingId INTEGER AUTO_INCREMENT,
+            bookingId INTEGER PRIMARY KEY AUTOINCREMENT,
             userId INT,
             showTimeId INT,
-            PRIMARY KEY (bookingId),
             FOREIGN KEY (userId) REFERENCES Customer(UserId),
             FOREIGN KEY (showTimeId) REFERENCES Showing(showTimeId)
             );
             """;
-    //bookingId INT AUTO_INCREMENT,
 
     //done
+    //model and controller done but still gotta fix when we do JFrame
     private static final String THEATRE_TABLE = """
             CREATE TABLE IF NOT EXISTS Theater (
-            theaterId INTEGER PRIMARY KEY AUTO_INCREMENT,
+            theaterId INTEGER PRIMARY KEY AUTOINCREMENT,
             location VARCHAR(255),
             );
             """;
@@ -93,18 +75,18 @@ public class DatabaseUtil {
     //done
     private static final String CINEMA_HALL_TABLE = """
             CREATE TABLE IF NOT EXISTS CinemaHall (
-            cinemaHallId INTEGER AUTO_INCREMENT,
+            cinemaHallId INTEGER PRIMARY KEY AUTOINCREMENT,
             theaterId INT,
             SeatCapacity INT,
-            PRIMARY KEY (cinemaHallId),
             FOREIGN KEY (theaterId) REFERENCES Theater(theaterId)
             );
             """;
 
     //done
+    //model and controller class done
     private static final String SHOWING_TABLE = """
             CREATE TABLE IF NOT EXISTS Showing (
-            showingId INTEGER PRIMARY KEY AUTO_INCREMENT,
+            showingId INTEGER PRIMARY KEY AUTOINCREMENT,
             movieId INT,
             cinemaHallId INT,
             showTime DATETIME,
@@ -116,14 +98,14 @@ public class DatabaseUtil {
     //remove??
     private static final String ADMIN_TABLE = """
             CREATE TABLE IF NOT EXISTS Admin (
-            adminId INTEGER AUTOINCREMENT,
+            adminId INTEGER PRIMARY KEY AUTOINCREMENT,
             username VARCHAR(255),
-            password VARCHAR(255),
-            PRIMARY KEY (adminId)
+            password VARCHAR(255)
             );
             """;
 
     //done
+    //model and controller done
     private static final String MOVIE_TABLE = """
             CREATE TABLE IF NOT EXISTS Movie (
             movieId INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -171,7 +153,7 @@ public class DatabaseUtil {
     public static void createAllTables() {
         executeSql(ACCOUNT_TABLE);
         executeSql(PAYMENT_TABLE);
-        executeSql(CUSTOMER_TABLE);
+        executeSql(CLIENT_TABLE);
         executeSql(BOOKING_TABLE);
         executeSql(THEATRE_TABLE);
         executeSql(CINEMA_HALL_TABLE);
@@ -405,6 +387,44 @@ public class DatabaseUtil {
         }
 
         return userID;
+    }
+
+    public List<Map<String,Object>> getRecords(String sql, int showtimeId) {
+        List<Map<String, Object>> records = new ArrayList<>();
+        try (Connection conn = connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, showtimeId);  // Set the showtimeId parameter
+            ResultSet rs = ps.executeQuery();
+
+            // Check if any results are returned
+            if (!rs.next()) {
+                System.out.println("No records found for Showtime ID: " + showtimeId);
+                return records; // Return empty list if no results
+            }
+
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int columnCount = rsmd.getColumnCount();
+
+            // Print column names for debugging
+            System.out.println("Column Count: " + columnCount);
+            for (int i = 1; i <= columnCount; i++) {
+                System.out.println("Column " + i + ": " + rsmd.getColumnName(i));
+            }
+
+            // Process the result set
+            do {
+                Map<String, Object> row = new HashMap<>();
+                for (int i = 1; i <= columnCount; i++) {
+                    row.put(rsmd.getColumnName(i), rs.getObject(i));
+                }
+                records.add(row);
+            } while (rs.next());
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return records;
     }
 }
 

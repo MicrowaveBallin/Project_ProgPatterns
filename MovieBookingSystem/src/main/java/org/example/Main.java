@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.controller.ClientController;
 //import org.example.model.Admin;
+import org.example.controller.MovieController;
 import org.example.model.Admin;
 import org.example.model.Client;
 import org.example.model.Showing;
@@ -37,6 +38,14 @@ public class Main {
         System.out.println(DatabaseUtil.selectFromCustomer());
 
 
+        MovieController movieController = new MovieController(connection);
+        System.out.println("Movies:");
+
+        // Add a new movie
+        movieController.addMovie("Inception", "Sci-Fi", 8.8, 148, "A mind-bending thriller about dreams within dreams.");
+
+        // Display all movies
+        movieController.displayMovies();
 
 
 //

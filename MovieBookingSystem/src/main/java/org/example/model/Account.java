@@ -12,7 +12,7 @@ public class Account {
     private int id;
     private int clientId;
     private String password;
-    private AccountStatus status;
+    //private AccountStatus status;
     private Client client;
     private Map paymentHistory;
 
@@ -21,12 +21,15 @@ public class Account {
         this.id = idCounter++;
         this.clientId = client.getId();
         this.password = password;
-        this.status = AccountStatus.ACTIVE;
+        //this.status = AccountStatus.ACTIVE;
         this.paymentHistory = new HashMap();
     }
 
-
-
+    public Account(int id, int clientId, String password) {
+        this.id = id;
+        this.clientId = clientId;
+        this.password = password;
+    }
 
     public int getId() {
         return id;
@@ -36,9 +39,9 @@ public class Account {
         return password;
     }
 
-    public AccountStatus getStatus() {
-        return status;
-    }
+//    public AccountStatus getStatus() {
+//        return status;
+//    }
 
     public Client getClient() {
         return client;

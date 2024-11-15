@@ -8,11 +8,11 @@ import java.sql.SQLException;
 
 public class DatabaseObjectFactory {
 
-    public static Client createCustomer(ResultSet rs) throws SQLException {
+    public static Client createClient(ResultSet rs) throws SQLException {
         return new Client(
                 rs.getInt("userId"),
-                ///client list
                 rs.getString("name"),
+                rs.getString("password"),
                 rs.getString("address"),
                 rs.getString("email"),
                 rs.getString("phone")
@@ -23,10 +23,9 @@ public class DatabaseObjectFactory {
         return new Account(
                 rs.getInt("accountId"),
                 rs.getInt("userId"),
-                rs.getString("password"),
-                rs.getString("status")
+                rs.getString("password")
+                //rs.getString("status")
         );
-        return null;
     }
 
 

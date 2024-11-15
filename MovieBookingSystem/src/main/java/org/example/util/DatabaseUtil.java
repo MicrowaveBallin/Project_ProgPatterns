@@ -1,6 +1,7 @@
 package org.example.util;
 
 import org.example.model.Account;
+import org.example.model.Client;
 import org.example.model.factory.DatabaseObjectFactory;
 
 import java.sql.*;
@@ -19,33 +20,34 @@ public class DatabaseUtil {
 
     //======================= TABLES =========================
     //done
-    private static final String ACCOUNT_TABLE = """
-            CREATE TABLE IF NOT EXISTS Account (
-            accountId INTEGER PRIMARY KEY AUTOINCREMENT,
-            userId INT,
-            password VARCHAR(255),
-            status VARCHAR(255),
-            FOREIGN KEY (userId) REFERENCES Customer(userId)
-            );
-            """;
+//    private static final String ACCOUNT_TABLE = """
+//            CREATE TABLE IF NOT EXISTS Account (
+//            accountId INTEGER PRIMARY KEY AUTOINCREMENT,
+//            userId INT,
+//            password VARCHAR(255),
+//            status VARCHAR(255),
+//            FOREIGN KEY (userId) REFERENCES Client(userId)
+//            );
+//            """;
 
     //done
     //model class done
     private static final String PAYMENT_TABLE = """
             CREATE TABLE IF NOT EXISTS Payment (
             paymentId INTEGER PRIMARY KEY AUTOINCREMENT,
+            userId INT,
             amount DECIMAL(10,2),
-            accountId INT,
-            FOREIGN KEY (accountId) REFERENCES Account(accountId)
+            FOREIGN KEY (userId) REFERENCES Client(userId)
             );
             """;
 
     //done
     //model class done
     private static final String CLIENT_TABLE = """
-            CREATE TABLE IF NOT EXISTS Customer (
+            CREATE TABLE IF NOT EXISTS Client (
             userId INTEGER PRIMARY KEY AUTOINCREMENT,
             name VARCHAR(255),
+            password VARCHAR(255),
             address VARCHAR(255),
             email VARCHAR(255),
             phone VARCHAR(15)
@@ -59,7 +61,7 @@ public class DatabaseUtil {
             bookingId INTEGER PRIMARY KEY AUTOINCREMENT,
             userId INT,
             showTimeId INT,
-            FOREIGN KEY (userId) REFERENCES Customer(UserId),
+            FOREIGN KEY (userId) REFERENCES Client(UserId),
             FOREIGN KEY (showTimeId) REFERENCES Showing(showTimeId)
             );
             """;
@@ -143,9 +145,8 @@ public class DatabaseUtil {
     }
 
     public static void createAllTables() {
-        executeSql(ACCOUNT_TABLE);
-        executeSql(PAYMENT_TABLE);
         executeSql(CLIENT_TABLE);
+        executeSql(PAYMENT_TABLE);
         executeSql(BOOKING_TABLE);
         executeSql(THEATRE_TABLE); //error
         executeSql(CINEMA_HALL_TABLE);
@@ -204,10 +205,28 @@ public class DatabaseUtil {
 
     // =============================================== TABLE/CLASS SPECIFIC ==================================
 
-    //CUSTOMER
+    //Client
+
+    // move to Databse util
+    //get clients in a list format
+    public static Map<Integer, Client> getClients(Connection conn) {
+        Map<Integer, Client> clients = new HashMap<>();
+        String sql = "SELECT * FROM Client";
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Client client = DatabaseObjectFactory.createClient(rs);
+                clients.put(client.getId(), client);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching clients: " + e.getMessage());
+        }
+        return clients;
+    }
+
     //reads from database and turns into plain text
-    public static String selectFromCustomer() {
-        String sql = "SELECT * FROM Customer";
+    public static String selectFromClient() {
+        String sql = "SELECT * FROM Client";
 
         StringBuilder builder = new StringBuilder();
         try (Connection conn = connect();
@@ -222,7 +241,7 @@ public class DatabaseUtil {
                 String email = rs.getString("email");
                 String phone = rs.getString("phone");
 
-                builder.append(String.format("Customer{ ID: %d, Name: %s, Address: %s, Email: %s, Phone: %s}\n", id, name, address, email, phone));
+                builder.append(String.format("Client{ ID: %d, Name: %s, Address: %s, Email: %s, Phone: %s}\n", id, name, address, email, phone));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -247,6 +266,8 @@ public class DatabaseUtil {
         }
         return accounts;
     }
+
+
 
 
 

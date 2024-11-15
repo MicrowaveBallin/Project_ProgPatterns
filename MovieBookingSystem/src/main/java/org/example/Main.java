@@ -2,7 +2,7 @@ package org.example;
 
 import org.example.controller.ClientController;
 //import org.example.model.Admin;
-import org.example.controller.MovieController;
+//import org.example.controller.MovieController;
 import org.example.model.Admin;
 import org.example.model.Client;
 import org.example.model.Showing;
@@ -29,23 +29,23 @@ public class Main {
 
         //get clients from database
         System.out.println("clients");
-        System.out.println(clientController.getClients());
+        System.out.println(DatabaseUtil.getClients(connection));
 
         //add a client to the database
-        Client c1 = new Client("Dink", "125 Pebbles", "pebsi@greatproblem.it","5146900331");
+        Client c1 = new Client("Dink", "12345", "125 Pebbles", "pebsi@greatproblem.it","5146900331");
         clientController.insertClient(c1);
 
-        System.out.println(DatabaseUtil.selectFromCustomer());
+        System.out.println(DatabaseUtil.selectFromClient());
 
 
-        MovieController movieController = new MovieController(connection);
-        System.out.println("Movies:");
-
-        // Add a new movie
-        movieController.addMovie("Inception", "Sci-Fi", 8.8, 148, "A mind-bending thriller about dreams within dreams.");
-
-        // Display all movies
-        movieController.displayMovies();
+//        MovieController movieController = new MovieController(connection);
+//        System.out.println("Movies:");
+//
+//        // Add a new movie
+//        movieController.addMovie("Inception", "Sci-Fi", 8.8, 148, "A mind-bending thriller about dreams within dreams.");
+//
+//        // Display all movies
+//        movieController.displayMovies();
 
 
 

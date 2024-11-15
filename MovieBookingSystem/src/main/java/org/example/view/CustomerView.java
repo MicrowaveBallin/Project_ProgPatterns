@@ -12,7 +12,7 @@ public class CustomerView extends JPanel {
     private ClientController customerController;
 
     public CustomerView() {
-        customerController = new ClientController();
+        //customerController = new ClientController();
 
         // Layout setup
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -43,32 +43,32 @@ public class CustomerView extends JPanel {
         add(fetchCustomerButton);
         add(updateCustomerButton);
 
-        // Fetch customer action
-        fetchCustomerButton.addActionListener(e -> fetchCustomerInfo());
-
-        // Update customer action
-        updateCustomerButton.addActionListener(e -> updateCustomerInfo());
+//        // Fetch customer action
+//        fetchCustomerButton.addActionListener(e -> fetchCustomerInfo());
+//
+//        // Update customer action
+//        updateCustomerButton.addActionListener(e -> updateCustomerInfo());
     }
 
     // Fetch customer info (just an example of fetching customer data)
-    private void fetchCustomerInfo() {
-        Client customer = customerController.getCustomerInfo(1);  // Example: Fetch customer by ID
-        nameField.setText(customer.getName());
-        emailField.setText(customer.getEmail());
-        phoneField.setText(customer.getPhone());
-    }
-
-    // Update customer info
-    private void updateCustomerInfo() {
-        String name = nameField.getText();
-        String email = emailField.getText();
-        String phone = phoneField.getText();
-
-        Client client = new Client(name, address, email, phone);
-        client.setName(name);
-        client.setEmail(email);
-        client.setPhone(phone);
-
-        customerController.updateCustomer(customer);
-    }
+//    private void fetchCustomerInfo() {
+//        Client customer = ClientController.getId(1);  // Example: Fetch customer by ID
+//        nameField.setText(customer.getName());
+//        emailField.setText(customer.getEmail());
+//        phoneField.setText(customer.getPhone());
+//    }
+//
+//    // Update customer info
+//    private void updateCustomerInfo() {
+//        String name = nameField.getText();
+//        String email = emailField.getText();
+//        String phone = phoneField.getText();
+//
+//        Client client = new Client(name, address, email, phone);
+//        client.setName(name);
+//        client.setEmail(email);
+//        client.setPhone(phone);
+//
+//        customerController.updateCustomer(customer);
+//    }
 }

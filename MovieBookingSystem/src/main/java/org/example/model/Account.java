@@ -10,6 +10,7 @@ public class Account {
 
     private static int idCounter = 1;
     private int id;
+    private int clientId;
     private String password;
     private AccountStatus status;
     private Client client;
@@ -18,12 +19,41 @@ public class Account {
 
     public Account(Client client, String password) {
         this.id = idCounter++;
+        this.clientId = client.getId();
         this.password = password;
         this.status = AccountStatus.ACTIVE;
         this.paymentHistory = new HashMap();
     }
 
-    //NOT WORKING YET
+
+
+
+    public int getId() {
+        return id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public AccountStatus getStatus() {
+        return status;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public Map getPaymentHistory() {
+        return paymentHistory;
+    }
+}
+
+
+
+
+
+//NOT WORKING YET
 //    public void insertAccount() {
 //        String sql = "INSERT INTO Account(accountId, userId, password) VALUES (" +
 //        this.id + "," + client.getId() + "," + this.password + ")";
@@ -34,5 +64,4 @@ public class Account {
 //        } else {
 //            System.out.println("Account added failed");
 //        }
-}
 //well

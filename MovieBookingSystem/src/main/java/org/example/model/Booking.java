@@ -45,7 +45,7 @@ public class Booking {
     public boolean createBooking(int userId, int showTimeId, int seatChoice) {
         String sql = "INSERT INTO Booking(userId, showTimeId) VALUES(?, ?)";
         Object[] values = {userId, showTimeId};
-        int rowsAffected = db.executeUpdate(sql, values);
+        int rowsAffected = DatabaseUtil.executeUpdate(sql, values);
 
         return rowsAffected > 0;
     }
@@ -53,13 +53,13 @@ public class Booking {
     // Method to retrieve all bookings for a user
     public void getAllBookingsForUser(int userId) {
         String sql = "SELECT * FROM Booking WHERE userId = ?";
-        db.executeQuery(sql, new Object[]{userId});
+        DatabaseUtil.executeUpdate(sql, new Object[]{userId});
     }
 
     // Method to cancel a booking
     public boolean cancelBooking(int bookingId) {
         String sql = "DELETE FROM Booking WHERE bookingId = ?";
-        int rowsAffected = db.executeUpdate(sql, new Object[]{bookingId});
+        int rowsAffected = DatabaseUtil.executeUpdate(sql, new Object[]{bookingId});
         return rowsAffected > 0;
     }
 }

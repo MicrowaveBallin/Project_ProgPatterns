@@ -48,6 +48,17 @@ public class Main {
         movieController.displayMovies();
 
 
+
+
+
+    }
+}
+
+
+
+//BURNER CODE
+
+
 //
 //        Showing s = new Showing();
 //        LocalDateTime date = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
@@ -58,12 +69,7 @@ public class Main {
 //        Admin a = new Admin();
 //        a.adminMenu();
 
-    }
-}
 
-
-
-//BURNER CODE
 //        Movie movie = new Movie("Inception", 148, 8.8, "Sci-Fi", "A thief steals secrets through dream-sharing technology.");
 //        movie.insertMovie();
 

@@ -25,7 +25,7 @@ public class ClientController extends Controller {
         this.clients = new HashMap<>();
     }
 
-    // throws SQLException in notes ???????
+    // move to Databse util
     //get clients in a list format
     public Map<Integer, Client> getClients() {
         //this.clients = new ArrayList<>();

@@ -1,5 +1,8 @@
 package org.example.util;
 
+import org.example.model.Account;
+import org.example.model.factory.DatabaseObjectFactory;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,9 +14,10 @@ public class DatabaseUtil {
     private static final String BASE_URL = "jdbc:sqlite:./src/main/resources/database/data.db";
 
     //IMPORTANT NOTES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //AUTO_INCREMENTS might not work
+    //put all READING function in Controller classes here and make them static
     //remove admin table???maybe lets see at the end but not now
 
+    //======================= TABLES =========================
     //done
     private static final String ACCOUNT_TABLE = """
             CREATE TABLE IF NOT EXISTS Account (
@@ -21,8 +25,6 @@ public class DatabaseUtil {
             userId INT,
             password VARCHAR(255),
             status VARCHAR(255),
-            email VARCHAR(255),
-            phone VARCHAR(15),
             FOREIGN KEY (userId) REFERENCES Customer(userId)
             );
             """;
@@ -67,7 +69,7 @@ public class DatabaseUtil {
     private static final String THEATRE_TABLE = """
             CREATE TABLE IF NOT EXISTS Theater (
             theaterId INTEGER PRIMARY KEY AUTOINCREMENT,
-            location VARCHAR(255),
+            location VARCHAR(255)
             );
             """;
     //SeatingCapacity VARCHAR(255),
@@ -113,21 +115,11 @@ public class DatabaseUtil {
             genre VARCHAR(255),
             rating DECIMAL(3,2),
             duration INT,
-            synopsis TEXT,
-            PRIMARY KEY (movieId)
+            synopsis TEXT
             );
             """;
 
-//    public static Connection connect() {
-//        Connection connection = null; ///????  null
-//        try {
-//            connection = DriverManager.getConnection(BASE_URL);
-//            System.out.println("Connection to SQLite has been established.");
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-//        return connection;
-//    }
+    //=============================== GENERAL =================================
 
     public static Connection connect() {
         try {
@@ -155,7 +147,7 @@ public class DatabaseUtil {
         executeSql(PAYMENT_TABLE);
         executeSql(CLIENT_TABLE);
         executeSql(BOOKING_TABLE);
-        executeSql(THEATRE_TABLE);
+        executeSql(THEATRE_TABLE); //error
         executeSql(CINEMA_HALL_TABLE);
         executeSql(SHOWING_TABLE);
         executeSql(ADMIN_TABLE);
@@ -174,6 +166,45 @@ public class DatabaseUtil {
         return false;
     }
 
+    public static int executeUpdate(String sql, Object[] values) {
+        int rowsAffected = 0;
+        try(Connection conn = connect();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+            for(int i = 0; i < values.length; i++) {
+                ps.setObject(i + 1, values[i]);
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return rowsAffected;
+    }
+
+    //this makes sure to get all the data from the database and convert it into a format, so i think we can work with it easily
+    public List<Map<String,Object>> getRecords(String sql) {
+        List<Map<String, Object>> records = new ArrayList<>();
+        try(Connection conn = connect();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()) {
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int columnCount = rsmd.getColumnCount();
+            while(rs.next()) {
+                Map<String, Object> row = new HashMap<>();
+                for(int i = 1; i <= columnCount; i++) {
+                    row.put(rsmd.getColumnName(i), rs.getObject(i));
+                }
+                records.add(row);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return records;
+    }
+
+
+
+    // =============================================== TABLE/CLASS SPECIFIC ==================================
+
+    //CUSTOMER
     //reads from database and turns into plain text
     public static String selectFromCustomer() {
         String sql = "SELECT * FROM Customer";
@@ -200,58 +231,25 @@ public class DatabaseUtil {
         return builder.toString();
     }
 
-
-    //Dont remove it we need the executeUpdate and getRecord
-    //executeUpdate helps send changes to the database, we use it to safely send the data and handle any errors.
-    /*public int executeUpdate(String sql, Object[] values) {
-        int rowsAffected = 0;
-        try(Connection conn = connect();
-            PreparedStatement ps = conn.prepareStatement(sql)){
-            for(int i = 0; i < values.length; i++) {
-                ps.setObject(i+1, values[i]);
+    //ACCOUNT
+    //move to util
+    public static Map<Integer, Account> getAccount(Connection connection) {
+        Map<Integer, Account> accounts = new HashMap<>();
+        String sql = "SELECT * FROM Account";
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Account account = DatabaseObjectFactory.createAccount(rs);
+                accounts.put(account.getId(), account);
             }
-            rowsAffected = ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Error fetching clients: " + e.getMessage());
         }
-        return rowsAffected;
-    }*/
-
-    public int executeUpdate(String sql, Object[] values) {
-        int rowsAffected = 0;
-        try(Connection conn = connect();
-        PreparedStatement ps = conn.prepareStatement(sql)) {
-            for(int i = 0; i < values.length; i++) {
-                ps.setObject(i + 1, values[i]);
-            }
-        } catch(SQLException e) {
-            e.printStackTrace();
-        }
-        return rowsAffected;
+        return accounts;
     }
 
 
 
-    //this makes sure to get all the data from the database and convert it into a format, so i think we can work with it easily
-    public List<Map<String,Object>> getRecords(String sql) {
-        List<Map<String, Object>> records = new ArrayList<>();
-        try(Connection conn = connect();
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery()) {
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int columnCount = rsmd.getColumnCount();
-            while(rs.next()) {
-                Map<String, Object> row = new HashMap<>();
-                for(int i = 1; i <= columnCount; i++) {
-                    row.put(rsmd.getColumnName(i), rs.getObject(i));
-                }
-                records.add(row);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return records;
-    }
 
     public static final String INSERT_SQL = """
             INSERT INTO students VALUES(1, "MIKE", 18)
@@ -428,4 +426,21 @@ public class DatabaseUtil {
     }
 }
 
+
+
+//Dont remove it we need the executeUpdate and getRecord
+//executeUpdate helps send changes to the database, we use it to safely send the data and handle any errors.
+    /*public int executeUpdate(String sql, Object[] values) {
+        int rowsAffected = 0;
+        try(Connection conn = connect();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            for(int i = 0; i < values.length; i++) {
+                ps.setObject(i+1, values[i]);
+            }
+            rowsAffected = ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rowsAffected;
+    }*/
 

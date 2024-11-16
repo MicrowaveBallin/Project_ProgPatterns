@@ -5,11 +5,8 @@ import org.example.util.DatabaseUtil;
 
 import java.sql.*;
 
-public class PaymentController extends Controller {
+public class PaymentController {
 
-    public PaymentController(Connection connection) {
-        super(connection);
-    }
 
     // Method to insert a new payment
     public boolean insertPayment(Payment payment) {

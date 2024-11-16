@@ -12,18 +12,13 @@ import java.util.Map;
 
 //import static org.example.util.DatabaseUtil.connect;
 
-public class ClientController extends Controller {
+public class ClientController {
 
-    private Map<Integer, Client> clients; ///MAP MAYBE???????????
+    private Map<Integer, Client> clients = new HashMap<>(); ///MAP MAYBE???????????
+
 
     //WARNINGS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //Move database stuff into DatabaseUtil???
-
-    public ClientController(Connection connection) {
-
-        super(connection);
-        this.clients = new HashMap<>();
-    }
 
 
     //TRYING EXPERIMENTAL FROM NOTES

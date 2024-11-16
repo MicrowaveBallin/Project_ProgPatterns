@@ -26,17 +26,17 @@ public class Main {
         DatabaseUtil.createAllTables();
 
         //create controllers
-//        ClientController clientController = new ClientController(DatabaseUtil.getConnection());
-//
-//        //get clients from database
-//        System.out.println("clients");
-//        System.out.println(DatabaseUtil.getClients(DatabaseUtil.getConnection()));
-//
-//        //add a client to the database
-//        Client c1 = new Client("Dink", "12345", "125 Pebbles", "pebsi@greatproblem.it","5146900331");
-//        clientController.insertClient(c1);
-//
-//        System.out.println(DatabaseUtil.selectFromClient());
+        ClientController clientController = new ClientController();
+
+        //get clients from database
+        System.out.println("clients");
+        System.out.println(DatabaseUtil.getClients());
+
+        //add a client to the database
+        Client c1 = new Client("Dink", "12345", "125 Pebbles", "pebsi@greatproblem.it","5146900331");
+        clientController.insertClient(c1);
+
+        System.out.println(DatabaseUtil.selectFromClient());
 
 
 //        MovieController movieController = new MovieController(connection);

@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class DatabaseUtil {
     private static final String BASE_URL = "jdbc:sqlite:./src/main/resources/database/data.db";
-    private static Connection connection;
+    private static final Connection connection = DatabaseUtil.connect();
 
     //IMPORTANT NOTES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //put all READING function in Controller classes here and make them static
@@ -124,9 +124,9 @@ public class DatabaseUtil {
     //=============================== GENERAL =================================
 
     public static Connection getConnection() {
-        if (connection == null) {
-            connection = connect();
-        }
+//        if (connection == null) {
+//            connection = connect();
+//        }
         return connection;
     }
 
@@ -204,10 +204,10 @@ public class DatabaseUtil {
 
     //CLIENT
 
-    public static Map<Integer, Client> getClients(Connection conn) {
+    public static Map<Integer, Client> getClients() {
         Map<Integer, Client> clients = new HashMap<>();
         String sql = "SELECT * FROM Client";
-        try (Statement stmt = conn.createStatement();
+        try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Client client = DatabaseObjectFactory.createClient(rs);
@@ -351,11 +351,12 @@ public class DatabaseUtil {
             while (rs.next()) {
                 int id = rs.getInt("userId");
                 String name = rs.getString("name");
+                String password = rs.getString("password");
                 String address = rs.getString("address");
                 String email = rs.getString("email");
                 String phone = rs.getString("phone");
 
-                builder.append(String.format("Client{ ID: %d, Name: %s, Address: %s, Email: %s, Phone: %s}\n", id, name, address, email, phone));
+                builder.append(String.format("Client{ ID: %d, Name: %s, Password: %s, Address: %s, Email: %s, Phone: %s}\n", id, name, password,address, email, phone));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

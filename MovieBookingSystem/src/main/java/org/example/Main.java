@@ -36,7 +36,22 @@ public class Main {
         Client c1 = new Client("Dink", "12345", "125 Pebbles", "pebsi@greatproblem.it","5146900331");
         clientController.insertClient(c1);
 
+        //print all clients
         System.out.println(DatabaseUtil.selectFromClient());
+
+        //create a payment
+        System.out.println("payments");
+        c1.addPayment(12.00);
+
+//        //view from client
+//        for (Payment payment : c1.getPaymentHistory()) {
+//            System.out.println(payment);
+//        }
+//
+//        //view from database
+//        for (Payment payment : DatabaseUtil.getAllPayments()) {
+//            System.out.println(payment);
+//        }
 
 
 //        MovieController movieController = new MovieController(connection);

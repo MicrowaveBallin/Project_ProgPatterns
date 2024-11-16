@@ -18,27 +18,17 @@ public class DatabaseUtil {
     //remove admin table???maybe lets see at the end but not now
 
     //======================= TABLES =========================
-    //done
-    private static final String ACCOUNT_TABLE = """
-            CREATE TABLE IF NOT EXISTS Account (
-            accountId INTEGER PRIMARY KEY AUTOINCREMENT,
-            userId INT,
-            password VARCHAR(255),
-            status VARCHAR(255),
-            FOREIGN KEY (userId) REFERENCES Client(userId)
-            );
-            """;
+//    //done
+//    private static final String ACCOUNT_TABLE = """
+//            CREATE TABLE IF NOT EXISTS Account (
+//            accountId INTEGER PRIMARY KEY AUTOINCREMENT,
+//            userId INT,
+//            password VARCHAR(255),
+//            status VARCHAR(255),
+//            FOREIGN KEY (userId) REFERENCES Client(userId)
+//            );
+//            """;
 
-    //done
-    //model class done
-    private static final String PAYMENT_TABLE = """
-            CREATE TABLE IF NOT EXISTS Payment (
-            paymentId INTEGER PRIMARY KEY AUTOINCREMENT,
-            userId INT,
-            amount DECIMAL(10,2),
-            FOREIGN KEY (userId) REFERENCES Client(userId)
-            );
-            """;
 
     //done
     //model class done
@@ -50,6 +40,17 @@ public class DatabaseUtil {
             address VARCHAR(255),
             email VARCHAR(255),
             phone VARCHAR(15)
+            );
+            """;
+
+    //done
+    //model class done
+    private static final String PAYMENT_TABLE = """
+            CREATE TABLE IF NOT EXISTS Payment (
+            paymentId INTEGER PRIMARY KEY AUTOINCREMENT,
+            userId INT,
+            amount DECIMAL(10,2),
+            FOREIGN KEY (userId) REFERENCES Client(userId)
             );
             """;
 
@@ -141,7 +142,7 @@ public class DatabaseUtil {
     }
 
     public static void createAllTables() {
-        executeSql(ACCOUNT_TABLE);
+        //executeSql(ACCOUNT_TABLE);
         executeSql(CLIENT_TABLE);
         executeSql(PAYMENT_TABLE);
         executeSql(BOOKING_TABLE);
@@ -219,28 +220,28 @@ public class DatabaseUtil {
         return clients;
     }
 
-    //ACCOUNT
 
-    public static Map<Integer, Account> getAccounts(Connection conn) {
-        Map<Integer, Account> accounts = new HashMap<>();
-        String sql = "SELECT * FROM Account";
-        try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                Account account = DatabaseObjectFactory.createAccount(rs);
-                accounts.put(account.getAccountId(), account);
-            }
-        } catch (SQLException e) {
-            System.out.println("Error fetching accounts: " + e.getMessage());
-        }
-        return accounts;
-    }
 
     //PAYMENT
-    public static Map<Integer, Payment> getPayments(Connection conn) {
-        Map<Integer, Payment> payments = new HashMap<>();
+    public static List<Payment> getAllPayments() {
+        List<Payment> payments = new ArrayList<>();
         String sql = "SELECT * FROM Payment";
-        try (Statement stmt = conn.createStatement();
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Payment payment = DatabaseObjectFactory.createPayment(rs);
+                payments.add(payment.getPaymentId(), payment);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching payments: " + e.getMessage());
+        }
+        return payments;
+    }
+
+    public static Map<Integer, Payment> getPayments(int clientId) {
+        Map<Integer, Payment> payments = new HashMap<>();
+        String sql = "SELECT * FROM Payment WHERE userId = " + clientId;
+        try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Payment payment = DatabaseObjectFactory.createPayment(rs);
@@ -250,6 +251,23 @@ public class DatabaseUtil {
             System.out.println("Error fetching payments: " + e.getMessage());
         }
         return payments;
+    }
+
+    // Method to insert a new payment
+    public static boolean insertPayment(Payment payment) {
+        String sql = "INSERT INTO Payment (paymentId, userId, amount) VALUES (?, ?, ?)";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, payment.getPaymentId());
+            pstmt.setInt(2, payment.getClientId());
+            pstmt.setDouble(3, payment.getAmount());
+            pstmt.executeUpdate();
+            System.out.println("Payment inserted successfully.");
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
     }
 
     //BOOKING
@@ -580,3 +598,19 @@ public class DatabaseUtil {
         return rowsAffected;
     }*/
 
+//    //ACCOUNT
+//
+//    public static Map<Integer, Account> getAccounts(Connection conn) {
+//        Map<Integer, Account> accounts = new HashMap<>();
+//        String sql = "SELECT * FROM Account";
+//        try (Statement stmt = conn.createStatement();
+//             ResultSet rs = stmt.executeQuery(sql)) {
+//            while (rs.next()) {
+//                Account account = DatabaseObjectFactory.createAccount(rs);
+//                accounts.put(account.getAccountId(), account);
+//            }
+//        } catch (SQLException e) {
+//            System.out.println("Error fetching accounts: " + e.getMessage());
+//        }
+//        return accounts;
+//    }

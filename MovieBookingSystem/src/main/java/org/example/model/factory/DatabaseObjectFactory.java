@@ -21,19 +21,19 @@ public class DatabaseObjectFactory {
         );
     }
 
-    public static Account createAccount(ResultSet rs) throws SQLException {
-        return new Account(
-                rs.getInt("accountId"),
-                rs.getInt("userId"),
-                rs.getString("password"),
-                rs.getString("status")
-        );
-    }
+//    public static Account createAccount(ResultSet rs) throws SQLException {
+//        return new Account(
+//                rs.getInt("accountId"),
+//                rs.getInt("userId"),
+//                rs.getString("password"),
+//                rs.getString("status")
+//        );
+//    }
 
     public static Payment createPayment(ResultSet rs) throws SQLException {
         return new Payment(
                 rs.getInt("paymentId"),
-                rs.getBigDecimal("amount"),
+                rs.getDouble("amount"),
                 rs.getInt("userId")
         );
     }

@@ -46,39 +46,39 @@ public class AccountController extends Controller {
         return false;
     }
 
-    // Method to fetch all accounts from the database
-    public Map<Integer, Account> getAccounts(Connection conn) {
-        Map<Integer, Account> accounts = new HashMap<>();
-        String sql = "SELECT * FROM Account";
-        try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                Account account = DatabaseObjectFactory.createAccount(rs);
-                accounts.put(account.getAccountId(), account);
-            }
-        } catch (SQLException e) {
-            System.out.println("Error fetching accounts: " + e.getMessage());
-        }
-        return accounts;
-    }
+//    // Method to fetch all accounts from the database
+//    public Map<Integer, Account> getAccounts(Connection conn) {
+//        Map<Integer, Account> accounts = new HashMap<>();
+//        String sql = "SELECT * FROM Account";
+//        try (Statement stmt = conn.createStatement();
+//             ResultSet rs = stmt.executeQuery(sql)) {
+//            while (rs.next()) {
+//                Account account = DatabaseObjectFactory.createAccount(rs);
+//                accounts.put(account.getAccountId(), account);
+//            }
+//        } catch (SQLException e) {
+//            System.out.println("Error fetching accounts: " + e.getMessage());
+//        }
+//        return accounts;
+//    }
 
-    // Method to fetch an account by ID from the database
-    public Account getAccountById(int accountId) {
-        String sql = "SELECT * FROM Account WHERE accountId = ?";
-        try (
-                Connection conn = DatabaseUtil.getConnection();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, accountId);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    return DatabaseObjectFactory.createAccount(rs);
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("Error fetching account by ID: " + e.getMessage());
-        }
-        return null;
-    }
+//    // Method to fetch an account by ID from the database
+//    public Account getAccountById(int accountId) {
+//        String sql = "SELECT * FROM Account WHERE accountId = ?";
+//        try (
+//                Connection conn = DatabaseUtil.getConnection();
+//                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+//            pstmt.setInt(1, accountId);
+//            try (ResultSet rs = pstmt.executeQuery()) {
+//                if (rs.next()) {
+//                    return DatabaseObjectFactory.createAccount(rs);
+//                }
+//            }
+//        } catch (SQLException e) {
+//            System.out.println("Error fetching account by ID: " + e.getMessage());
+//        }
+//        return null;
+//    }
 
     // Method to update an account in the database
     public boolean updateAccount(Account account) {

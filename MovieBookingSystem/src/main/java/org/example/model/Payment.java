@@ -3,14 +3,31 @@ package org.example.model;
 import java.math.BigDecimal;
 
 public class Payment {
+    private static int counter = 1;
     private int paymentId;
-    private BigDecimal amount;
-    private int accountId;
+    private int clientId;
+    private double amount;
 
-    public Payment(int paymentId, BigDecimal amount, int accountId) {
+    public Payment(int paymentId, double amount, int clientId) {
         this.paymentId = paymentId;
         this.amount = amount;
-        this.accountId = accountId;
+        this.clientId = clientId;
+    }
+
+    public Payment(int clientId, double amount) {
+        this.paymentId = counter++;
+        this.clientId = clientId;
+        this.amount = amount;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "paymentId=" + paymentId +
+                ", clientId=" + clientId +
+                ", amount=" + amount +
+                '}';
     }
 
     // Getters and Setters
@@ -22,19 +39,24 @@ public class Payment {
         this.paymentId = paymentId;
     }
 
-    public BigDecimal getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
-    public int getAccountId() {
-        return accountId;
+    public int getClientId() {
+        return clientId;
     }
 
-    public void setAccountId(int accountId) {
-        this.accountId = accountId;
+    public void setClientId(int accountId) {
+        this.clientId = accountId;
     }
+
+
+
+
 }
+

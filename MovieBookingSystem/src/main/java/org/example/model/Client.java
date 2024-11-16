@@ -69,4 +69,16 @@ public class Client extends Person {
     public String getPhone() {
         return phone;
     }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", address='" + address + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone +
+                '}';
+    }
 }

@@ -15,6 +15,8 @@ import java.util.Map;
 public class Movie {
     //WORKING
 
+    private static int idCounter = 1;
+    private int movieId;
     private String title;
     private String genre;
     private double rating;
@@ -22,7 +24,8 @@ public class Movie {
     private String synopsis;
 
     // Constructor to initialize the Movie object
-    public Movie(String title, int duration, double rating, String genre, String synopsis) {
+    public Movie(int movieId, String title, int duration, double rating, String genre, String synopsis) {
+        this.movieId = idCounter++;
         this.title = title;
         this.duration = duration;
         this.rating = rating;
@@ -32,6 +35,7 @@ public class Movie {
 
     // Constructor for retrieving movie details from database
     public Movie(String title, String genre, double rating, int duration, String synopsis) {
+        idCounter++;
         this.title = title;
         this.genre = genre;
         this.rating = rating;
@@ -86,11 +90,23 @@ public class Movie {
     }
 
     // Getter methods for Movie details
+
+
+    public int getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
+    }
+
     public String getTitle() {
+
         return title;
     }
 
     public String getGenre() {
+
         return genre;
     }
 
@@ -99,10 +115,12 @@ public class Movie {
     }
 
     public int getDuration() {
+
         return duration;
     }
 
     public String getSynopsis() {
+
         return synopsis;
     }
 }

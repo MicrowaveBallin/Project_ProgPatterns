@@ -47,9 +47,14 @@ public class ClientController extends Controller {
         return false;
     }
 
+    private boolean isValidClient(Client client) {
+        return client.getName() != null && !client.getName().isEmpty() &&
+                client.getEmail() != null && client.getEmail().contains("@") &&
+                client.getPhone() != null && client.getPhone().length() >= 12;
+    }
+}
 
-
-    //NOT WORKING YET OLD CODE
+//NOT WORKING YET OLD CODE
 //    public void insertClient() {
 //        String sql = "INSERT INTO Client(accountId, userId, password) VALUES (" +
 //                this.id + "," + client.getId() + "," + this.password + ")";
@@ -60,6 +65,3 @@ public class ClientController extends Controller {
 //        } else {
 //            System.out.println("Account added failed");
 //        }
-
-
-}

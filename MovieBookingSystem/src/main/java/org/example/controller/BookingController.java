@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class BookingController extends Controller {
+    //fix this
     private Map<Integer, Client> bookings;
     private Scanner sc = new Scanner(System.in);
     private Booking booking;

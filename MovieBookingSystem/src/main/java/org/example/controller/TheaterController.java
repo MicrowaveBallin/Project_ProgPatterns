@@ -4,13 +4,48 @@ import org.example.model.Client;
 import org.example.model.Theater;
 import org.example.util.DatabaseUtil;
 
-import java.sql.Connection;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class TheaterController extends Controller {
-    private DatabaseUtil db = new DatabaseUtil();
+    public TheaterController(Connection connection) {
+        super(connection);
+    }
+
+    // Method to insert a new theater
+    public boolean insertTheater(Theater theater) {
+        String sql = "INSERT INTO Theater (theaterId, theaterName, location) VALUES (?, ?)";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, theater.getTheaterId());
+            pstmt.setString(2, theater.getTheaterName());
+            pstmt.setString(3, theater.getLocation());
+            pstmt.executeUpdate();
+            System.out.println("Theater inserted successfully.");
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
+    // Method to retrieve all theaters
+    public void getAllTheaters() {
+        String sql = "SELECT * FROM Theater";
+        try (Connection conn = DatabaseUtil.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                System.out.println("Theater: " + rs.getString("name") + " | Location: " + rs.getString("location"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
+    /*private DatabaseUtil db = new DatabaseUtil();
     private Map<Integer, Client> theaters;
 
     public TheaterController(Connection connection) {
@@ -41,4 +76,4 @@ public class TheaterController extends Controller {
             System.out.println("-----------------------------------------------------");
         }
     }
-}
+}*/

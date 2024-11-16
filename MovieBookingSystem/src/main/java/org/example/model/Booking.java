@@ -16,6 +16,12 @@ public class Booking {
         db = new DatabaseUtil();
     }
 
+    public Booking(int bookingId, int userId, int showTimeId) {
+        this.bookingId = bookingId;
+        this.userId = userId;
+        this.showTimeId = showTimeId;
+    }
+
     // Getters and setters
     public int getBookingId() {
         return bookingId;

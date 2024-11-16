@@ -1,8 +1,6 @@
 package org.example.util;
 
-import org.example.model.Account;
-import org.example.model.Client;
-import org.example.model.Payment;
+import org.example.model.*;
 import org.example.model.factory.DatabaseObjectFactory;
 
 import java.sql.*;
@@ -12,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 public class DatabaseUtil {
-    //private static final String BASE_URL = "jdbc:sqlite:C:\\Users\\santh\\Documents\\GitHub\\Project_ProgPatterns\\MovieBookingSystem\\src\\main\\resources\\database\\data.db";
     private static final String BASE_URL = "jdbc:sqlite:./src/main/resources/database/data.db";
     private static Connection connection;
 
@@ -22,15 +19,15 @@ public class DatabaseUtil {
 
     //======================= TABLES =========================
     //done
-//    private static final String ACCOUNT_TABLE = """
-//            CREATE TABLE IF NOT EXISTS Account (
-//            accountId INTEGER PRIMARY KEY AUTOINCREMENT,
-//            userId INT,
-//            password VARCHAR(255),
-//            status VARCHAR(255),
-//            FOREIGN KEY (userId) REFERENCES Client(userId)
-//            );
-//            """;
+    private static final String ACCOUNT_TABLE = """
+            CREATE TABLE IF NOT EXISTS Account (
+            accountId INTEGER PRIMARY KEY AUTOINCREMENT,
+            userId INT,
+            password VARCHAR(255),
+            status VARCHAR(255),
+            FOREIGN KEY (userId) REFERENCES Client(userId)
+            );
+            """;
 
     //done
     //model class done
@@ -73,6 +70,7 @@ public class DatabaseUtil {
     private static final String THEATRE_TABLE = """
             CREATE TABLE IF NOT EXISTS Theater (
             theaterId INTEGER PRIMARY KEY AUTOINCREMENT,
+            theaterName VARCHAR(255),
             location VARCHAR(255)
             );
             """;
@@ -119,7 +117,7 @@ public class DatabaseUtil {
             genre VARCHAR(255),
             rating DECIMAL(3,2),
             duration INT,
-            synopsis TEXT
+            synopsis VARCHAR(255)
             );
             """;
 
@@ -128,12 +126,9 @@ public class DatabaseUtil {
     public static Connection getConnection() {
         if (connection == null) {
             connection = connect();
-            return connection;
-        } else {
-            return connection;
         }
+        return connection;
     }
-
 
     private static Connection connect() {
         try {
@@ -145,18 +140,8 @@ public class DatabaseUtil {
         }
     }
 
-    // Optional method to close connections, if needed
-    public static void closeConnection(Connection connection) {
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                System.err.println("Failed to close connection: " + e.getMessage());
-            }
-        }
-    }
-
     public static void createAllTables() {
+        executeSql(ACCOUNT_TABLE);
         executeSql(CLIENT_TABLE);
         executeSql(PAYMENT_TABLE);
         executeSql(BOOKING_TABLE);
@@ -234,6 +219,106 @@ public class DatabaseUtil {
         return clients;
     }
 
+    //ACCOUNT
+
+    public static Map<Integer, Account> getAccounts(Connection conn) {
+        Map<Integer, Account> accounts = new HashMap<>();
+        String sql = "SELECT * FROM Account";
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Account account = DatabaseObjectFactory.createAccount(rs);
+                accounts.put(account.getAccountId(), account);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching accounts: " + e.getMessage());
+        }
+        return accounts;
+    }
+
+    //PAYMENT
+    public static Map<Integer, Payment> getPayments(Connection conn) {
+        Map<Integer, Payment> payments = new HashMap<>();
+        String sql = "SELECT * FROM Payment";
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Payment payment = DatabaseObjectFactory.createPayment(rs);
+                payments.put(payment.getPaymentId(), payment);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching payments: " + e.getMessage());
+        }
+        return payments;
+    }
+
+    //BOOKING
+    private static List<Booking> getBookingsForClient(Connection conn, int clientId) {
+        List<Booking> bookings = new ArrayList<>();
+        String sql = "SELECT * FROM Booking WHERE clientId = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, clientId);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                bookings.add(DatabaseObjectFactory.createBooking(rs));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching bookings: " + e.getMessage());
+        }
+        return bookings;
+    }
+
+    //SHOWING
+    private static List<Showing> getShowingsForMovie(Connection conn, int movieId) {
+        List<Showing> showings = new ArrayList<>();
+        String sql = "SELECT * FROM Showing WHERE movieId = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, movieId);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                showings.add(DatabaseObjectFactory.createShowing(rs));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching showings: " + e.getMessage());
+        }
+        return showings;
+    }
+
+    //THEATER
+    private static List<Theater> getTheatersForCinema(Connection conn, int cinemaId) {
+        List<Theater> theaters = new ArrayList<>();
+        String sql = "SELECT * FROM Theater WHERE cinemaId = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, cinemaId);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                theaters.add(DatabaseObjectFactory.createTheater(rs));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching theaters: " + e.getMessage());
+        }
+        return theaters;
+    }
+
+
+    //CINEMAHALL
+    private static List<CinemaHall> getCinemaHallsForTheater(Connection conn, int theaterId) {
+        List<CinemaHall> cinemaHalls = new ArrayList<>();
+        String sql = "SELECT * FROM CinemaHall WHERE theaterId = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, theaterId);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                cinemaHalls.add(DatabaseObjectFactory.createCinemaHall(rs));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching cinema halls: " + e.getMessage());
+        }
+        return cinemaHalls;
+    }
+
+
+
     //Nick finsih work here <-----------------------------------------------------------
 //
 //    public static List<Payment> getPayments(Connection conn,) {
@@ -278,13 +363,6 @@ public class DatabaseUtil {
 
         return builder.toString();
     }
-
-
-
-
-
-
-
 
     public static final String INSERT_SQL = """
             INSERT INTO students VALUES(1, "MIKE", 18)
@@ -422,7 +500,7 @@ public class DatabaseUtil {
         return userID;
     }
 
-    public List<Map<String,Object>> getRecords(String sql, int showtimeId) {
+    public List<Map<String,Object>> getRecordsShowing(String sql, int showtimeId) {
         List<Map<String, Object>> records = new ArrayList<>();
         try (Connection conn = connect();
              PreparedStatement ps = conn.prepareStatement(sql)) {

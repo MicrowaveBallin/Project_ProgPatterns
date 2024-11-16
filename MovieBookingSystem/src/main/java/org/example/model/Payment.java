@@ -1,11 +1,13 @@
 package org.example.model;
 
+import java.math.BigDecimal;
+
 public class Payment {
     private int paymentId;
-    private double amount;
+    private BigDecimal amount;
     private int accountId;
 
-    public Payment(int paymentId, double amount, int accountId) {
+    public Payment(int paymentId, BigDecimal amount, int accountId) {
         this.paymentId = paymentId;
         this.amount = amount;
         this.accountId = accountId;
@@ -20,11 +22,11 @@ public class Payment {
         this.paymentId = paymentId;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

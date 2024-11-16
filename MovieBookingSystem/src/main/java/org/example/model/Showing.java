@@ -3,6 +3,7 @@ package org.example.model;
 import org.example.util.DatabaseUtil;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -10,10 +11,10 @@ public class Showing {
     private int showingId;
     private int movieId;
     private int theaterId;
-    private Timestamp showTime;
+    private LocalDateTime showTime;
 
     // Constructor
-    public Showing(int showingId, int movieId, int theaterId, Timestamp showTime) {
+    public Showing(int showingId, int movieId, int theaterId, LocalDateTime showTime) {
         this.showingId = showingId;
         this.movieId = movieId;
         this.theaterId = theaterId;
@@ -45,11 +46,11 @@ public class Showing {
         this.theaterId = theaterId;
     }
 
-    public Timestamp getShowTime() {
+    public LocalDateTime getShowTime() {
         return showTime;
     }
 
-    public void setShowTime(Timestamp showTime) {
+    public void setShowTime(LocalDateTime showTime) {
         this.showTime = showTime;
     }
 }

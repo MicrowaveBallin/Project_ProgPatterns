@@ -2,14 +2,50 @@ package org.example.controller;
 
 import org.example.model.Client;
 import org.example.model.Movie;
+import org.example.util.DatabaseUtil;
 
-import java.sql.Connection;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MovieController extends Controller {
-    private Map<Integer, Client> movies;
+    public MovieController(Connection connection) {
+        super(connection);
+    }
+
+    // Method to insert a new movie
+    public boolean insertMovie(Movie movie) {
+        String sql = "INSERT INTO Movie (title, genre, duration) VALUES (?, ?, ?)";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, movie.getTitle());
+            pstmt.setString(2, movie.getGenre());
+            pstmt.setInt(3, movie.getDuration());
+            pstmt.executeUpdate();
+            System.out.println("Movie inserted successfully.");
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
+    // Method to retrieve all movies
+    public void getAllMovies() {
+        String sql = "SELECT * FROM Movie";
+        try (Connection conn = DatabaseUtil.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                System.out.println("Movie: " + rs.getString("title") + " | Genre: " + rs.getString("genre") + " | Duration: " + rs.getInt("duration"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
+    /*private Map<Integer, Client> movies;
 
     public MovieController(Connection connection) {
         super(connection);
@@ -35,4 +71,4 @@ public class MovieController extends Controller {
             System.out.println("---------------------------------");
         }
     }
-}
+}*/

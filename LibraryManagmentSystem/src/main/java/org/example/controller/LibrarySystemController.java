@@ -18,17 +18,24 @@ public class LibrarySystemController {
         DatabaseController.createAllTables();
     }
 
-    //have seperate table inserts /////////////////////////////////////////////////////////
-    syntax error to remind your dumb ass
-    public void enterBooksAuthorsRecord(Book book, Author author) {
+    public void enterBookRecord(Book book) {
         librarySystem.addBook(book);
+        DatabaseController.insertIntoBook(book);
+    }
+
+    public void enterAuthorRecord(Author author) {
         librarySystem.addAuthor(author);
+        DatabaseController.insertIntoAuthor(author);
+    }
+
+    //have seperate table inserts??????????????????????????????????????????????????????????????????????????????????
+    public void enterBooksAuthorsRecord(Book book, Author author) {
         book.addAuthor(author);
         author.addBook(book);
-        DatabaseController.insertIntoBook(book);
-        DatabaseController.insertIntoAuthor(author);
         DatabaseController.insertIntoBooksAuthors(book, author);
     }
+
+
 
 
 

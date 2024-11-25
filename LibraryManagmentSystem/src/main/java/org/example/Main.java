@@ -21,11 +21,13 @@ public class Main {
         Author a2 = new Author("Dink",1998);
 
         //insert a record
-        controller.enterRecord(b1,a1);
-        controller.enterRecord(b1,a2);
-        controller.enterRecord(b2,a1);
-        controller.enterRecord(b2,a2);
-
+        controller.enterBookRecord(b1);
+        controller.enterBookRecord(b2);
+        controller.enterAuthorRecord(a1);
+        controller.enterAuthorRecord(a2);
+        controller.enterBooksAuthorsRecord(b1,a1);
+        controller.enterBooksAuthorsRecord(b1,a2);
+        controller.enterBooksAuthorsRecord(b2,a2);
 
         //DatabaseController.insertIntoBook(b1);
         //DatabaseController.insertIntoAuthor(a1);

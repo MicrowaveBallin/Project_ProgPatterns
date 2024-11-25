@@ -1,17 +1,19 @@
 package org.example.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class LibrarySystem {
-    private List<Book> books;
-    private List<Author> authors;
+    private Set<Book> books;
+    private Set<Author> authors;
 
     private static LibrarySystem instance;
 
     private LibrarySystem() {
-        books = new ArrayList<>();
-        authors = new ArrayList<>();
+        books = new HashSet<>();
+        authors = new HashSet<>();
     }
 
     public static LibrarySystem getInstance() {
@@ -37,11 +39,11 @@ public class LibrarySystem {
 
 
 
-    public List<Book> getBooks() {
+    public Set<Book> getBooks() {
         return books;
     }
 
-    public List<Author> getAuthors() {
+    public Set<Author> getAuthors() {
         return authors;
     }
 

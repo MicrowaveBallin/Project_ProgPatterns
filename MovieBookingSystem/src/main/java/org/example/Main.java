@@ -5,6 +5,7 @@ import org.example.controller.*;
 //import org.example.model.Admin;
 //import org.example.controller.MovieController;
 import org.example.model.*;
+import org.example.model.singeton.MovieBookingSystem;
 import org.example.util.DatabaseUtil;
 
 import java.math.BigDecimal;
@@ -22,26 +23,46 @@ import java.util.Scanner;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        //Create tables
-        DatabaseUtil.createAllTables();
 
-        //create controllers
-        ClientController clientController = new ClientController();
+    MovieBookingSystemController controller = new MovieBookingSystemController();
 
-        //get clients from database
-        System.out.println("clients");
-        System.out.println(DatabaseUtil.getClients());
 
-        //add a client to the database
-        Client c1 = new Client("Dink", "12345", "125 Pebbles", "pebsi@greatproblem.it","5146900331");
-        clientController.insertClient(c1);
 
-        //print all clients
-        System.out.println(DatabaseUtil.selectFromClient());
 
-        //create a payment
-        System.out.println("payments");
-        c1.addPayment(12.00);
+
+
+
+
+
+
+
+//        MovieBookingSystem mbs = MovieBookingSystem.getInstance();
+//
+//        System.out.println(mbs.getClients());
+//        System.out.println(mbs.getPayments());
+
+
+
+//        //Create tables
+//        DatabaseUtil.createAllTables();
+//
+//        //create controllers
+//        ClientController clientController = new ClientController();
+//
+//        //get clients from database
+//        System.out.println("clients");
+//        System.out.println(DatabaseUtil.getClients());
+//
+//        //add a client to the database
+//        Client c1 = new Client("Dink", "12345", "125 Pebbles", "pebsi@greatproblem.it","5146900331");
+//        clientController.insertClient(c1);
+//
+//        //print all clients
+//        System.out.println(DatabaseUtil.selectFromClient());
+//
+//        //create a payment
+//        System.out.println("payments");
+//        c1.addPayment(12.00);
 
 //        //view from client
 //        for (Payment payment : c1.getPaymentHistory()) {

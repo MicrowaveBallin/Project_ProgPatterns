@@ -205,14 +205,14 @@ public class DatabaseUtil {
 
     //CLIENT
 
-    public static Map<Integer, Client> getClients() {
-        Map<Integer, Client> clients = new HashMap<>();
+    public static List<Client> getClients() {
+        List<Client> clients = new ArrayList<>();
         String sql = "SELECT * FROM Client";
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Client client = DatabaseObjectFactory.createClient(rs);
-                clients.put(client.getId(), client);
+                clients.add(client);
             }
         } catch (SQLException e) {
             System.out.println("Error fetching clients: " + e.getMessage());
@@ -230,7 +230,7 @@ public class DatabaseUtil {
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Payment payment = DatabaseObjectFactory.createPayment(rs);
-                payments.add(payment.getPaymentId(), payment);
+                payments.add(payment);
             }
         } catch (SQLException e) {
             System.out.println("Error fetching payments: " + e.getMessage());
@@ -238,14 +238,15 @@ public class DatabaseUtil {
         return payments;
     }
 
-    public static Map<Integer, Payment> getPayments(int clientId) {
-        Map<Integer, Payment> payments = new HashMap<>();
+    public static List<Payment> getPayments(int clientId) {
+        List<Payment> payments = new ArrayList<>();
         String sql = "SELECT * FROM Payment WHERE userId = " + clientId;
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Payment payment = DatabaseObjectFactory.createPayment(rs);
-                payments.put(payment.getPaymentId(), payment);
+                //payments.put(payment.getPaymentId(), payment);
+                payments.add(payment);
             }
         } catch (SQLException e) {
             System.out.println("Error fetching payments: " + e.getMessage());
@@ -334,7 +335,6 @@ public class DatabaseUtil {
         }
         return cinemaHalls;
     }
-
 
 
     //Nick finsih work here <-----------------------------------------------------------
@@ -578,6 +578,21 @@ public class DatabaseUtil {
 //    return accounts;
 //}
 
+//get payments from specified clientId as a map
+//public static Map<Integer, Payment> getPayments(int clientId) {
+//    Map<Integer, Payment> payments = new HashMap<>();
+//    String sql = "SELECT * FROM Payment WHERE userId = " + clientId;
+//    try (Statement stmt = connection.createStatement();
+//         ResultSet rs = stmt.executeQuery(sql)) {
+//        while (rs.next()) {
+//            Payment payment = DatabaseObjectFactory.createPayment(rs);
+//            payments.put(payment.getPaymentId(), payment);
+//        }
+//    } catch (SQLException e) {
+//        System.out.println("Error fetching payments: " + e.getMessage());
+//    }
+//    return payments;
+//}
 
 
 

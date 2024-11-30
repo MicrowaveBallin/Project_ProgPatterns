@@ -18,7 +18,8 @@ public class MovieBookingSystemController {
         DatabaseController.insertClient(client);
     }
 
-    public void addPayment(int clientId, Payment payment) {
+    public void addPayment(int clientId, double amount) {
+        Payment payment = new Payment(clientId, amount);
         movieBookingSystem.addPayment(payment);
         DatabaseController.insertPayment(payment);
     }

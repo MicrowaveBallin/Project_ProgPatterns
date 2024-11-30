@@ -32,6 +32,15 @@ public class MovieBookingSystem {
         return instance;
     }
 
+    public void addClient(Client client) {
+        clients.add(client);
+    }
+
+    public void addPayment(Payment payment) {
+        payments.add(payment);
+    }
+
+
     public List<Client> getClients() {
         return clients;
     }
@@ -43,4 +52,11 @@ public class MovieBookingSystem {
     public List<Movie> getMovies() {
         return movies;
     }
+
+
+
+
+
+
+
 }

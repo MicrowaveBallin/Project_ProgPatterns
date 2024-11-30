@@ -24,7 +24,16 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-    MovieBookingSystemController controller = new MovieBookingSystemController();
+        MovieBookingSystemController controller = new MovieBookingSystemController();
+
+        Client c1 = new Client("Frank","4","street","bear@pebsi.org","1234567890");
+        Client c2 = new Client("Rita","gdjfkf","street","bear@pebsi.org","1234567890");
+
+
+        controller.addClient(c1);
+        controller.addClient(c2);
+
+
 
 
 

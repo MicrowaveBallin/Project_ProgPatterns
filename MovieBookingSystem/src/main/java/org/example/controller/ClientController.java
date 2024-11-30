@@ -21,34 +21,6 @@ public class ClientController {
     //Move database stuff into DatabaseUtil???
 
 
-    //TRYING EXPERIMENTAL FROM NOTES
-    public boolean insertClient(Client client) {
-        String sql = "INSERT INTO Client (userId ,name, password, address, email, phone) VALUES (?, ?, ?, ?, ?, ?)";
-        try (
-                Connection conn = DatabaseUtil.getConnection();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, client.getId());
-            pstmt.setString(2, client.getName());
-            pstmt.setString(3, client.getPassword());
-            pstmt.setString(4, client.getAddress());
-            pstmt.setString(5, client.getEmail());
-            pstmt.setString(6, client.getPhone());
-            pstmt.executeUpdate();
-            System.out.println("Client inserted successfully.");
-            return true;
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return false;
-    }
-
-    private boolean isValidClient(Client client) {
-        return client.getName() != null && !client.getName().isEmpty() &&
-                client.getEmail() != null && client.getEmail().contains("@") &&
-                client.getPhone() != null && client.getPhone().length() >= 12;
-    }
-}
-
 //NOT WORKING YET OLD CODE
 //    public void insertClient() {
 //        String sql = "INSERT INTO Client(accountId, userId, password) VALUES (" +
@@ -60,3 +32,4 @@ public class ClientController {
 //        } else {
 //            System.out.println("Account added failed");
 //        }
+}

@@ -42,10 +42,9 @@ public class Client extends Person {
         this.address = address;
     }
 
-    public boolean addPayment(double amount) {
-        Payment payment = new Payment(this.id,amount);
-        DatabaseUtil.insertPayment(payment);
-        return true;
+    public void addPayment(double amount) {
+        paymentHistory.add(new Payment(id,amount));
+        //DatabaseUtil.insertPayment(payment);
     }
 
     public int getId() {

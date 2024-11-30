@@ -255,21 +255,21 @@ public class DatabaseUtil {
     }
 
     // Method to insert a new payment
-    public static boolean insertPayment(Payment payment) {
-        String sql = "INSERT INTO Payment (paymentId, userId, amount) VALUES (?, ?, ?)";
-        try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, payment.getPaymentId());
-            pstmt.setInt(2, payment.getClientId());
-            pstmt.setDouble(3, payment.getAmount());
-            pstmt.executeUpdate();
-            System.out.println("Payment inserted successfully.");
-            return true;
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return false;
-    }
+//    public static boolean insertPayment(Payment payment) {
+//        String sql = "INSERT INTO Payment (paymentId, userId, amount) VALUES (?, ?, ?)";
+//        try (Connection conn = DatabaseUtil.getConnection();
+//             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+//            pstmt.setInt(1, payment.getPaymentId());
+//            pstmt.setInt(2, payment.getClientId());
+//            pstmt.setDouble(3, payment.getAmount());
+//            pstmt.executeUpdate();
+//            System.out.println("Payment inserted successfully.");
+//            return true;
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//        }
+//        return false;
+//    }
 
     //BOOKING
     private static List<Booking> getBookingsForClient(Connection conn, int clientId) {

@@ -1,24 +1,21 @@
 package org.example.model;
 
-import java.time.LocalDateTime;
-
-public class Showing {
+public class ShowTime {
     private int showTimeId;
     private int movieId;
-    private LocalDateTime showDateTime;
-    private int hallNumber;
+    private String showDateTime;
 
-    public Showing(int showTimeId, int movieId, LocalDateTime showDateTime, int hallNumber) {
+    public ShowTime(int showTimeId, int movieId, String showDateTime) {
         this.showTimeId = showTimeId;
         this.movieId = movieId;
         this.showDateTime = showDateTime;
-        this.hallNumber = hallNumber;
     }
 
     // Getters and Setters
     public int getShowTimeId() {
         return showTimeId;
     }
+
     public void setShowTimeId(int showTimeId) {
         this.showTimeId = showTimeId;
     }
@@ -26,21 +23,25 @@ public class Showing {
     public int getMovieId() {
         return movieId;
     }
+
     public void setMovieId(int movieId) {
         this.movieId = movieId;
     }
 
-    public LocalDateTime getShowDateTime() {
+    public String getShowDateTime() {
         return showDateTime;
     }
-    public void setShowDateTime(LocalDateTime showDateTime) {
+
+    public void setShowDateTime(String showDateTime) {
         this.showDateTime = showDateTime;
     }
 
-    public int getHallNumber() {
-        return hallNumber;
-    }
-    public void setHallNumber(int hallNumber) {
-        this.hallNumber = hallNumber;
+    @Override
+    public String toString() {
+        return "ShowTime{" +
+                "showTimeId=" + showTimeId +
+                ", movieId=" + movieId +
+                ", showDateTime='" + showDateTime + '\'' +
+                '}';
     }
 }

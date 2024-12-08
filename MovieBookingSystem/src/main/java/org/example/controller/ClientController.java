@@ -14,22 +14,21 @@ import java.util.Map;
 
 public class ClientController {
 
-    private Map<Integer, Client> clients = new HashMap<>(); ///MAP MAYBE???????????
+    public void createClient(Client client) {
+        String query = "INSERT INTO Client (name, password, address, email, phone) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
 
+            pstmt.setString(1, client.getName());
+            pstmt.setString(2, client.getPassword());
+            pstmt.setString(3, client.getAddress());
+            pstmt.setString(4, client.getEmail());
+            pstmt.setString(5, client.getPhone());
 
-    //WARNINGS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //Move database stuff into DatabaseUtil???
-
-
-//NOT WORKING YET OLD CODE
-//    public void insertClient() {
-//        String sql = "INSERT INTO Client(accountId, userId, password) VALUES (" +
-//                this.id + "," + client.getId() + "," + this.password + ")";
-//        Object[] values = {movieId, theaterId, showTime};
-//        int rowsAffected = db.executeUpdate(sql, values);
-//        if(rowsAffected > 0) {
-//            System.out.println("Account added successfully");
-//        } else {
-//            System.out.println("Account added failed");
-//        }
+            pstmt.executeUpdate();
+            System.out.println("Client created successfully!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

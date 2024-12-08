@@ -1,29 +1,14 @@
 package org.example.model;
-
-import org.example.util.DatabaseUtil;
-import java.sql.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-//import static org.example.util.DatabaseUtil.connect;
-
-public class Client extends Person {
-
-    private static int idCounter = 1;
-    private int id;
+public class Client {
+    private int userId;
     private String name;
     private String password;
     private String address;
     private String email;
     private String phone;
-    private List<Payment> paymentHistory = new ArrayList<>();
 
-    //without id
-    public Client(String name, String password, String address, String email, String phone) {
-        this.id = idCounter++;
+    public Client(int userId, String name, String password, String address, String email, String phone) {
+        this.userId = userId;
         this.name = name;
         this.password = password;
         this.address = address;
@@ -31,59 +16,46 @@ public class Client extends Person {
         this.phone = phone;
     }
 
-    //with id, for creation from database
-    public Client(int id, String name, String password, String address, String email, String phone) {
-        idCounter++;
-        this.id = id;
-        this.name = name;
-        this.password = password;
-        this.phone = phone;
-        this.email = email;
-        this.address = address;
+    // Getters and Setters
+    public int getUserId() {
+        return userId;
     }
-
-    public void addPayment(double amount) {
-        paymentHistory.add(new Payment(id,amount));
-        //DatabaseUtil.insertPayment(payment);
-    }
-
-    public int getId() {
-        return id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getName() {
         return name;
     }
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getPassword() {
         return password;
     }
-
-    public List<Payment> getPaymentHistory() {
-        return paymentHistory;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getAddress() {
         return address;
     }
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public String getEmail() {
         return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhone() {
         return phone;
     }
-
-    @Override
-    public String toString() {
-        return "Client{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", address='" + address + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone +
-                '}';
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

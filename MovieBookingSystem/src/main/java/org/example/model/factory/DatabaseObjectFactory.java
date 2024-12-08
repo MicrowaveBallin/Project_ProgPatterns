@@ -17,24 +17,14 @@ public class DatabaseObjectFactory {
                 rs.getString("address"),
                 rs.getString("email"),
                 rs.getString("phone")
-                //createPayment(rs.getInt("userId"));
         );
     }
-
-//    public static Account createAccount(ResultSet rs) throws SQLException {
-//        return new Account(
-//                rs.getInt("accountId"),
-//                rs.getInt("userId"),
-//                rs.getString("password"),
-//                rs.getString("status")
-//        );
-//    }
 
     public static Payment createPayment(ResultSet rs) throws SQLException {
         return new Payment(
                 rs.getInt("paymentId"),
-                rs.getDouble("amount"),
-                rs.getInt("userId")
+                rs.getInt("userId"),
+                rs.getDouble("amount")
         );
     }
 
@@ -42,9 +32,9 @@ public class DatabaseObjectFactory {
         return new Movie(
                 rs.getInt("movieId"),
                 rs.getString("title"),
-                rs.getInt("duration"),
-                rs.getDouble("rating"),
                 rs.getString("genre"),
+                rs.getDouble("rating"),
+                rs.getInt("duration"),
                 rs.getString("synopsis")
         );
     }
@@ -57,49 +47,14 @@ public class DatabaseObjectFactory {
         );
     }
 
-    public static CinemaHall createCinemaHall(ResultSet rs) throws SQLException {
-        return new CinemaHall(
-                rs.getInt("cinemaHallId"),
-                rs.getInt("theaterId"),
-                rs.getInt("seatingCapacity")
-        );
-    }
-
     public static Showing createShowing(ResultSet rs) throws SQLException {
-        Timestamp timestamp = rs.getTimestamp("showTime");
-        LocalDateTime showTime = timestamp != null ? timestamp.toLocalDateTime() : null; // Convert Timestamp to LocalDateTime
+        Timestamp timestamp = rs.getTimestamp("showDateTime");
+        LocalDateTime showDateTime = timestamp != null ? timestamp.toLocalDateTime() : null;
         return new Showing(
-                rs.getInt("showingId"),
+                rs.getInt("showTimeId"),
                 rs.getInt("movieId"),
-                rs.getInt("theaterId"),
-                showTime
+                showDateTime,
+                rs.getInt("hallNumber")
         );
     }
-
-    public static Theater createTheater(ResultSet rs) throws SQLException {
-        return new Theater(
-                rs.getInt("theaterId"),
-                rs.getString("theaterName"),
-                rs.getString("location") // Add other Theater properties if necessary
-        );
-    }
-
-
-//    public static Payment createPayment(ResultSet rs) throws SQLException {
-//        return new Payment();
-//    }
-
-
-//    public static Account createAccount(ResultSet rs) throws SQLException {
-//        return new Account(
-//                rs.getInt("accountId"),
-//                rs.getInt("userId"),
-//                rs.getString("password")
-//                //rs.getString("status")
-//        );
-//    }
-
-
-
-
 }

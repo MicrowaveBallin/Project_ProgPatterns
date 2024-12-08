@@ -1,15 +1,6 @@
 package org.example.controller;
 
-import org.example.model.Client;
-import org.example.model.User;
-import org.example.controller.ShowingController;
 import org.example.model.Showing;
-import org.example.model.Booking;
-
-import java.sql.Connection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
 
 public class UserController {
 //    private ShowingController showingService = new ShowingController(connection);

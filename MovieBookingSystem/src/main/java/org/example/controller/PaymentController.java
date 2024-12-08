@@ -6,22 +6,18 @@ import org.example.util.DatabaseUtil;
 import java.sql.*;
 
 public class PaymentController {
+    public void createPayment(Payment payment) {
+        String query = "INSERT INTO Payment (userId, amount) VALUES (?, ?)";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
 
+            pstmt.setInt(1, payment.getUserId());
+            pstmt.setDouble(2, payment.getAmount());
 
-
-
-//    // Method to retrieve payment details
-//    public void getPaymentDetails(int bookingId) {
-//        String sql = "SELECT * FROM Payment WHERE bookingId = ?";
-//        try (Connection conn = DatabaseUtil.getConnection();
-//             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-//            pstmt.setInt(1, bookingId);
-//            ResultSet rs = pstmt.executeQuery();
-//            while (rs.next()) {
-//                System.out.println("Payment for booking " + rs.getInt("bookingId") + ": " + rs.getDouble("amount"));
-//            }
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
+            pstmt.executeUpdate();
+            System.out.println("Payment created successfully!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

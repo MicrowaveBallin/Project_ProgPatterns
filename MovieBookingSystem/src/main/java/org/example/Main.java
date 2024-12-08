@@ -26,13 +26,15 @@ public class Main {
 
         MovieBookingSystemController controller = new MovieBookingSystemController();
 
-        Client c1 = new Client("Frank","4","street","bear@pebsi.org","1234567890");
-        Client c2 = new Client("Rita","gdjfkf","street","bear@pebsi.org","1234567890");
+        Client c1 = new Client("Frank","4","street1","bear@pebsi.org","1234567890");
+        Client c2 = new Client("Nick","beer","street2","anglegrinder@pebsi.org","0987654321");
 
-
+        // Add clients
         controller.addClient(c1);
         controller.addClient(c2);
 
+        // view clients
+        System.out.println(controller.getClients());
 
 
 
@@ -42,6 +44,35 @@ public class Main {
 
 
 
+
+
+
+
+
+
+
+//        System.out.println(controller.getPayments());
+//        System.out.println(p1);
+//
+//
+//        DatabaseController.insertPayment(p1);
+
+
+//        System.out.println(c1);
+//        System.out.println(c2);
+//
+//        DatabaseController.insertClient(c1);
+//        DatabaseController.insertClient(c2);
+//        System.out.println("post inset");
+//        //DatabaseController.insertPayment();
+//        //DatabaseController.insertPayment();
+//
+//
+//        controller.addClient(c1);
+//        System.out.println("test");
+//        controller.addClient(c2);
+//
+//        //DatabaseController.insertPayment();
 
 
 

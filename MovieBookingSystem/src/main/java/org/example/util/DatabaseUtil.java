@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class DatabaseUtil {
     private static final String BASE_URL = "jdbc:sqlite:./src/main/resources/database/data.db";
-    private static final Connection connection = DatabaseUtil.connect();
+    private static Connection connection = DatabaseUtil.connect();
 
     //IMPORTANT NOTES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //put all READING function in Controller classes here and make them static
@@ -124,11 +124,21 @@ public class DatabaseUtil {
 
     //=============================== GENERAL =================================
 
-    public static Connection getConnection() {
+//    public static Connection getConnection() {
 //        if (connection == null) {
 //            connection = connect();
 //        }
-        return connection;
+//        return connection;
+//    }
+
+    public static Connection getConnection() {
+        try {
+            return DriverManager.getConnection(BASE_URL);
+        } catch (SQLException e) {
+            System.err.println("Connection failed: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private static Connection connect() {
@@ -208,7 +218,7 @@ public class DatabaseUtil {
     public static List<Client> getClients() {
         List<Client> clients = new ArrayList<>();
         String sql = "SELECT * FROM Client";
-        try (Statement stmt = connection.createStatement();
+        try (Statement stmt = getConnection().createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Client client = DatabaseObjectFactory.createClient(rs);
@@ -226,7 +236,7 @@ public class DatabaseUtil {
     public static List<Payment> getAllPayments() {
         List<Payment> payments = new ArrayList<>();
         String sql = "SELECT * FROM Payment";
-        try (Statement stmt = connection.createStatement();
+        try (Statement stmt = getConnection().createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Payment payment = DatabaseObjectFactory.createPayment(rs);
@@ -241,7 +251,7 @@ public class DatabaseUtil {
     public static List<Payment> getPayments(int clientId) {
         List<Payment> payments = new ArrayList<>();
         String sql = "SELECT * FROM Payment WHERE userId = " + clientId;
-        try (Statement stmt = connection.createStatement();
+        try (Statement stmt = getConnection().createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Payment payment = DatabaseObjectFactory.createPayment(rs);

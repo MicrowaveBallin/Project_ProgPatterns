@@ -16,6 +16,5 @@ public class Main {
         new MainDashboardView().setVisible(true);
 
 
-        //DatabaseUtil.createAllTables();
     }
 }

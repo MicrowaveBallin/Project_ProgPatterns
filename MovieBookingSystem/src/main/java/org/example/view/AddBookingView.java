@@ -8,8 +8,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.example.controller.BookingController;
 import org.example.controller.DatabaseController;
 import org.example.controller.ShowTimeController;
+import org.example.controller.ShowingController;
+import org.example.model.Booking;
 import org.example.model.ShowTime;
 import org.example.util.DatabaseUtil;
 
@@ -56,8 +59,10 @@ public class AddBookingView extends JFrame {
 
                 // Delegate action to ShowTimeController
                 boolean success = ShowTimeController.addShowtime(showTime);
+                BookingController.createBooking(new Booking(0,showTime.getShowTimeId())); //0 for admin user
 
                 if (success) {
+                    //ShowingController.createShowTime(showTime);
                     JOptionPane.showMessageDialog(AddBookingView.this, "Showtime added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(AddBookingView.this, "Error adding showtime", "Error", JOptionPane.ERROR_MESSAGE);

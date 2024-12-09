@@ -4,7 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
+
+import org.example.model.Movie;
 import org.example.util.DatabaseUtil;
+import org.example.controller.MovieController;
 
 public class AddMovieView extends JFrame {
     private JTextField titleField, genreField, ratingField, durationField;
@@ -49,7 +52,9 @@ public class AddMovieView extends JFrame {
                 String synopsis = synopsisArea.getText();
 
                 // Save movie to the database
-                saveMovieToDatabase(title, genre, rating, duration, synopsis);
+                Movie newMovie = new Movie(title, genre, rating, duration, synopsis);
+                MovieController.createMovie(newMovie);
+                //saveMovieToDatabase(title, genre, rating, duration, synopsis);
 
                 // Clear the fields after saving the movie
                 clearFields();

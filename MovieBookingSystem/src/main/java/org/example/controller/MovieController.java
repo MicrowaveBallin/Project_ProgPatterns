@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MovieController  {
-    public void createMovie(Movie movie) {
+    public static void createMovie(Movie movie) {
         String query = "INSERT INTO Movie (title, genre, rating, duration, synopsis) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {

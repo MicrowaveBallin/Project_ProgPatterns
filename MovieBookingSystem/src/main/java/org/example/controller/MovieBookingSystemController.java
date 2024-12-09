@@ -37,4 +37,6 @@ public class MovieBookingSystemController {
     public List<Payment> getPayments() {
         return movieBookingSystem.getPayments();
     }
+
+
 }

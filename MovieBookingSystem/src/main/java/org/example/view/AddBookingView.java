@@ -8,7 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.example.controller.DatabaseController;
 import org.example.controller.ShowTimeController;
+import org.example.model.ShowTime;
 import org.example.util.DatabaseUtil;
 
 public class AddBookingView extends JFrame {
@@ -44,13 +46,16 @@ public class AddBookingView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String selectedMovie = (String) movieComboBox.getSelectedItem();
-                String showtime = showtimeField.getText();
+                String showDateTime = showtimeField.getText();
 
                 // Get movieId from movie title
                 int movieId = getMovieIdFromTitle(selectedMovie);
 
+                // Create object
+                ShowTime showTime = new ShowTime(movieId, showDateTime);
+
                 // Delegate action to ShowTimeController
-                boolean success = ShowTimeController.addShowtime(movieId, showtime);
+                boolean success = ShowTimeController.addShowtime(showTime);
 
                 if (success) {
                     JOptionPane.showMessageDialog(AddBookingView.this, "Showtime added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -63,26 +68,31 @@ public class AddBookingView extends JFrame {
             }
         });
 
-        // Action listener for the "Remove Showtime" button
-        removeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedMovie = (String) movieComboBox.getSelectedItem();
-                String showtime = showtimeField.getText();
+        // Action listener for the "Remove Showtime" button FIXX
+//        removeButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                String selectedMovie = (String) movieComboBox.getSelectedItem();
+//                String showDateTime = showtimeField.getText();
+//
+//                // Create object FIXX
+//                ShowTime showTime = new ShowTime(selectedMovie,showDateTime);
+//
+//                // Delegate action to ShowTimeController
+//                boolean success = ShowTimeController.removeShowtime(showTime);
+//
+//                if (success) {
+//                    JOptionPane.showMessageDialog(AddBookingView.this, "Showtime removed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+//                } else {
+//                    JOptionPane.showMessageDialog(AddBookingView.this, "Error removing showtime", "Error", JOptionPane.ERROR_MESSAGE);
+//                }
+//
+//                // Clear the fields after removing the showtime
+//                clearFields();
+//            }
+//        });
 
-                // Delegate action to ShowTimeController
-                boolean success = ShowTimeController.removeShowtime(selectedMovie, showtime);
 
-                if (success) {
-                    JOptionPane.showMessageDialog(AddBookingView.this, "Showtime removed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(AddBookingView.this, "Error removing showtime", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-
-                // Clear the fields after removing the showtime
-                clearFields();
-            }
-        });
 
         // Action listener for the "Back" button
         backButton.addActionListener(new ActionListener() {
@@ -98,6 +108,15 @@ public class AddBookingView extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
     }
+
+    //FIXX
+//    private int getMovieIdByName(String movieName) {
+//        return DatabaseController.get.stream()
+//                .filter(movie -> movie.getName().equals(movieName))
+//                .findFirst()
+//                .map(Movie::getId)
+//                .orElseThrow(() -> new IllegalArgumentException("No movie found with name: " + movieName));
+//    }
 
     // Load movie titles into combo box
     private void loadMovies() {
@@ -137,4 +156,6 @@ public class AddBookingView extends JFrame {
         movieComboBox.setSelectedIndex(0);  // Reset combo box to the first item (default movie)
         showtimeField.setText("");  // Clear the showtime field
     }
+
+
 }

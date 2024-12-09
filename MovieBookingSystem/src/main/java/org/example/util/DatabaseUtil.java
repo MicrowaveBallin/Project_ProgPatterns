@@ -1,6 +1,11 @@
 package org.example.util;
 
+import org.example.model.*;
+import org.example.model.factory.DatabaseObjectFactory;
+
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseUtil {
     private static final String BASE_URL = "jdbc:sqlite:./src/main/resources/database/data.db";
@@ -49,8 +54,7 @@ public class DatabaseUtil {
             CREATE TABLE IF NOT EXISTS ShowTime (
             showTimeId INTEGER PRIMARY KEY AUTOINCREMENT,
             movieId INTEGER NOT NULL,
-            showDateTime DATETIME NOT NULL,
-            hallNumber INTEGER CHECK (hallNumber > 0),
+            showDateTime TEXT NOT NULL,
             FOREIGN KEY (movieId) REFERENCES Movie(movieId) ON DELETE CASCADE
             );
             """;
@@ -114,7 +118,7 @@ public class DatabaseUtil {
     }
 
 
-    public static void insertMovies() {
+    public static void insertDemoMovies() {
         String insertSql = """
         INSERT INTO Movie (title, genre, rating, duration, synopsis) VALUES
         ('The Shawshank Redemption', 'Drama', 9.3, 142, 'Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.'),
@@ -149,4 +153,122 @@ public class DatabaseUtil {
             e.printStackTrace();
         }
     }
+
+
+
+
+
+
+
+
+    // =============================================== GETTING DATA ==================================
+    //CLIENT
+    public static List<Client> getClients() {
+        List<Client> clients = new ArrayList<>();
+        String sql = "SELECT * FROM Client";
+        try (Statement stmt = getConnection().createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Client client = DatabaseObjectFactory.createClient(rs);
+                clients.add(client);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching clients: " + e.getMessage());
+        }
+        return clients;
+    }
+
+    //PAYMENT
+    public static List<Payment> getAllPayments() {
+        List<Payment> payments = new ArrayList<>();
+        String sql = "SELECT * FROM Payment";
+        try (Statement stmt = getConnection().createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Payment payment = DatabaseObjectFactory.createPayment(rs);
+                payments.add(payment);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching payments: " + e.getMessage());
+        }
+        return payments;
+    }
+
+    public static List<Payment> getClientPayments(int clientId) {
+        List<Payment> payments = new ArrayList<>();
+        String sql = "SELECT * FROM Payment WHERE userId = " + clientId;
+        try (Statement stmt = getConnection().createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Payment payment = DatabaseObjectFactory.createPayment(rs);
+                //payments.put(payment.getPaymentId(), payment);
+                payments.add(payment);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching payments: " + e.getMessage());
+        }
+        return payments;
+    }
+
+    //MOVIE
+    public static List<Movie> getAllMovies() {
+        List<Movie> movies = new ArrayList<>();
+        String sql = "SELECT * FROM Movie";
+        try (Statement stmt = getConnection().createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Movie movie = DatabaseObjectFactory.createMovie(rs);
+                movies.add(movie);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching payments: " + e.getMessage());
+        }
+        return movies;
+    }
+
+    //SHOWTIME
+    public static List<ShowTime> getAllShowTimes() {
+        List<ShowTime> showTimes = new ArrayList<>();
+        String sql = "SELECT * FROM ShowTime";
+        try (Statement stmt = getConnection().createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                ShowTime showTime = DatabaseObjectFactory.createShowTime(rs);
+                showTimes.add(showTime);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching payments: " + e.getMessage());
+        }
+        return showTimes;
+    }
+
+    //BOOKING
+    public static List<Booking> getAllBookings() {
+        List<Booking> bookings = new ArrayList<>();
+        String sql = "SELECT * FROM Booking";
+        try (Statement stmt = getConnection().createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Booking booking = DatabaseObjectFactory.createBooking(rs);
+                bookings.add(booking);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching payments: " + e.getMessage());
+        }
+        return bookings;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

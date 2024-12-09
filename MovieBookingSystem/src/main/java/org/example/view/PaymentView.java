@@ -3,8 +3,14 @@ package org.example.view;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+
+import org.example.Main;
 import org.example.controller.PaymentController;
+import org.example.controller.ShowTimeController;
+import org.example.controller.BookingController;
+import org.example.model.Booking;
 import org.example.model.Payment;
+import org.example.model.ShowTime;
 
 public class PaymentView extends JFrame {
     private JTextField cardNumberField, expirationField, cvvField;
@@ -12,7 +18,7 @@ public class PaymentView extends JFrame {
     private JButton payButton;
     private double amount;  // Amount to be paid (this should be passed from BookingView or MovieView)
 
-    public PaymentView(double amount) {
+    public PaymentView(ShowTime newShowTime, double amount) {
         this.amount = amount;
 
         setTitle("Payment");
@@ -56,13 +62,22 @@ public class PaymentView extends JFrame {
                     Payment payment = new Payment(0, userId, amount);  // Payment object, 0 for new payment
                     PaymentController paymentController = new PaymentController();
                     paymentController.createPayment(payment);
+                    ShowTimeController.addShowtime(newShowTime);
+                    BookingController.createBooking(new Booking(Main.loggedClientId,newShowTime.getShowTimeId()));
+
 
                     // Show success message and navigate back to main view or previous screen
                     JOptionPane.showMessageDialog(PaymentView.this, "Payment Successful!");
                     new MainView().setVisible(true);  // Assuming the main view will be shown after payment
                     dispose();
                 } else {
-                    JOptionPane.showMessageDialog(PaymentView.this, "Invalid credit card details");
+                    String invalidMessage = """
+                            Invalid credit card details!
+                            Card number must be 16 characters.
+                            Card expiration date must be 4 characters.
+                            Card cvv number must be 3 characters.
+                            """;
+                    JOptionPane.showMessageDialog(PaymentView.this, invalidMessage);
                 }
             }
         });
@@ -74,7 +89,7 @@ public class PaymentView extends JFrame {
 
     private boolean validateCardDetails(String cardNumber, String expirationDate, String cvv) {
         // Basic validation of credit card details
-        if (cardNumber.length() != 16 || expirationDate.length() != 5 || cvv.length() != 3) {
+        if (cardNumber.length() != 16 || expirationDate.length() != 4 || cvv.length() != 3) {
             return false;  // Return false if the details don't meet the expected format
         }
 

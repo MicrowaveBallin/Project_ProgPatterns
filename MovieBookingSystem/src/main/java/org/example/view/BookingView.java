@@ -1,5 +1,11 @@
 package org.example.view;
 
+import org.example.controller.DatabaseController;
+import org.example.model.Booking;
+import org.example.model.ShowTime;
+import org.example.model.singleton.MovieBookingSystem;
+import org.example.util.DatabaseUtil;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -9,6 +15,8 @@ public class BookingView extends JFrame {
     private JButton bookButton, payNowButton;
     private String selectedMovie;
     private double amountToPay;
+    private ShowTime newShowTime;
+    private Booking newBooking;
 
     public BookingView(String movieTitle) {
         selectedMovie = movieTitle;  // Get the selected movie title
@@ -35,6 +43,10 @@ public class BookingView extends JFrame {
                 // Calculate the amount based on the selected showtime
                 calculateAmount(selectedShowtime);
 
+                // Create showtime
+                newShowTime = new ShowTime(MovieBookingSystem.getMovieIdByName(movieTitle),selectedShowtime);
+
+
                 // Enable the "Pay Now" button after booking
                 payNowButton.setEnabled(true);
             }
@@ -44,7 +56,8 @@ public class BookingView extends JFrame {
         payNowButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new PaymentView(amountToPay).setVisible(true);  // Open PaymentView with calculated amount
+
+                new PaymentView(newShowTime,amountToPay).setVisible(true);  // Open PaymentView with calculated amount
                 dispose();  // Close the BookingView
             }
         });

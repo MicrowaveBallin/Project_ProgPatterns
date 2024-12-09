@@ -1,12 +1,12 @@
 package org.example.controller;
 
 import org.example.model.*;
+import org.example.model.factory.DatabaseObjectFactory;
 import org.example.util.DatabaseUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseController {
 
@@ -100,4 +100,12 @@ public class DatabaseController {
             System.out.println("Error inserting booking: " + e.getMessage());
         }
     }
+
+
+
+
+
+
+
+
 }

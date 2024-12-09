@@ -39,6 +39,15 @@ public class DatabaseObjectFactory {
         );
     }
 
+    public static ShowTime createShowTime(ResultSet rs) throws SQLException {
+        return new ShowTime(
+                rs.getInt("showTimeId"),
+                rs.getInt("movieId"),
+                rs.getString("showDateTime")
+        );
+    }
+
+
     public static Booking createBooking(ResultSet rs) throws SQLException {
         return new Booking(
                 rs.getInt("bookingId"),

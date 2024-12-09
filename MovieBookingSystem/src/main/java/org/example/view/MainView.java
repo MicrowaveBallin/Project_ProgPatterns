@@ -18,8 +18,8 @@ public class MainView extends JFrame {
 
         // Add buttons to the layout
         add(movieButton);
-        add(bookingButton);
-        add(paymentButton);
+        //add(bookingButton);
+        //add(paymentButton);
 
         // Action listeners for each button
         movieButton.addActionListener(new ActionListener() {
@@ -43,7 +43,7 @@ public class MainView extends JFrame {
         paymentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new PaymentView(0.00).setVisible(true);  // Open PaymentView with a dummy amount for now
+                new PaymentView(null,0.00).setVisible(true);  // Open PaymentView with a dummy amount for now
                 dispose();  // Close the MainView
             }
         });

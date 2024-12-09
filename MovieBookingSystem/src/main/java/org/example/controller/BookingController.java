@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class BookingController {
 
     // Method to create a booking entry in the Booking table
-    public void createBooking(Booking booking) {
+    public static void createBooking(Booking booking) {
         String query = "INSERT INTO Booking (userId, showTimeId) VALUES (?, ?)";
 
         try (Connection conn = DatabaseUtil.getConnection();  // Use the static connection from DatabaseUtil

@@ -1,5 +1,6 @@
 package org.example.view;
 
+import org.example.Main;
 import org.example.util.DatabaseUtil;
 
 import javax.swing.*;
@@ -39,7 +40,9 @@ public class LoginView extends JFrame {
                 // Implement login logic here
                 String email = emailField.getText();
                 String password = new String(passwordField.getPassword());
-                if (login(email, password)) {
+                int loginId = login(email, password);
+                if (loginId > 0) {
+                    Main.loggedClientId = loginId;
                     new MainView().setVisible(true);
                     dispose();
                 } else {
@@ -62,17 +65,20 @@ public class LoginView extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    private boolean login(String email, String password) {
+    private int login(String email, String password) {
         String query = "SELECT * FROM Client WHERE email = ? AND password = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, email);
             pstmt.setString(2, password);
             ResultSet rs = pstmt.executeQuery();
-            return rs.next(); // If a row is returned, login is successful
+            return rs.getInt("userId"); // If a row is returned, login is successful
         } catch (SQLException e) {
             System.err.println("Error during login: " + e.getMessage());
-            return false;
+            return -1;
         }
     }
+
+
+
 }
